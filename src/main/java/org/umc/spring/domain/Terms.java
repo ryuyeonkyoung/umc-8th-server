@@ -14,11 +14,13 @@ public class Terms {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String content;
-
+    @Column(nullable = false, length = 50)
     private String title;
 
+    @Lob
+    @Column(nullable = false)
     private String body;
 
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean optional;
 }

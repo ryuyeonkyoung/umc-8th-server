@@ -17,16 +17,23 @@ public class Mission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Lob
+    @Column(nullable = false)
     private String missionSpec;
 
+    @Column(nullable = false, columnDefinition = "INT DEFAULT 1000")
     private Integer minSpendMoney;
 
+    @Column(nullable = false)
     private Integer rewardPoints;
 
+    @Column(nullable = false, length = 50)
     private String address;
 
+    @Column(nullable = false)
     private LocalDate deadline;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "VARCHAR(15) DEFAULT 'CHALLENGING'")
     private MissionStatus status;
 }

@@ -19,29 +19,40 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 20)
     private String name;
 
+    @Column(nullable = false, length = 20)
     private String nickname;
 
+    @Column(nullable = false, length = 20)
     private String socialId;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "VARCHAR(10)")
     private SocialType socialType;
 
+    @Column(nullable = false, length = 20)
     private String phoneNumber;
 
+    @Column(nullable = false)
     private Boolean phoneVerified;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "VARCHAR(10)")
     private Gender gender;
 
+    @Column(nullable = false, length = 50)
     private String address;
 
+    @Column(nullable = false, length = 50)
     private String email;
 
+    @Column(nullable = false, length = 20, columnDefinition = "INT DEFAULT 0")
     private Integer point = 0; // 초기값 설정
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'ACTIVE'")
     private MemberStatus status;
 
     private LocalDate inactiveDate;

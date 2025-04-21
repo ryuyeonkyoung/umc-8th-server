@@ -15,10 +15,14 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Lob
+    @Column(nullable = false)
     private String context;
 
+    @Column(nullable = false)
     private Float rating;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'ACTIVE'")
     private ReviewStatus status;
 }
