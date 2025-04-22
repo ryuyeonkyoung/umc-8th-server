@@ -2,6 +2,7 @@ package org.umc.spring.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.umc.spring.domain.common.BaseEntity;
 import org.umc.spring.domain.enums.Gender;
 import org.umc.spring.domain.enums.MemberStatus;
 import org.umc.spring.domain.enums.SocialType;
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
