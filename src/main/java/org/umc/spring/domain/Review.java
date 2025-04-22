@@ -2,6 +2,7 @@ package org.umc.spring.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.umc.spring.domain.common.BaseEntity;
 import org.umc.spring.domain.enums.ReviewStatus;
 
 @Entity
@@ -9,7 +10,7 @@ import org.umc.spring.domain.enums.ReviewStatus;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Review {
+public class Review extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

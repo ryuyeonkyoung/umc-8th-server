@@ -2,6 +2,7 @@ package org.umc.spring.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.umc.spring.domain.common.BaseEntity;
 import org.umc.spring.domain.enums.MissionStatus;
 
 import java.time.LocalDate;
@@ -11,7 +12,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Mission {
+public class Mission extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

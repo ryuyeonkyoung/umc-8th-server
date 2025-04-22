@@ -2,6 +2,7 @@ package org.umc.spring.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.umc.spring.domain.common.BaseEntity;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -11,7 +12,7 @@ import java.time.LocalTime;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Store {
+public class Store extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
