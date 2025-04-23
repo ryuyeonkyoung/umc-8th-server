@@ -4,8 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.umc.spring.domain.common.BaseEntity;
 import org.umc.spring.domain.enums.MissionStatus;
+import org.umc.spring.domain.mapping.MemberMission;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,6 +20,9 @@ public class Mission extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToMany(mappedBy = "member")
+    private List<MemberMission> memberMissions = new ArrayList<>();
 
     @Lob
     @Column(nullable = false)
