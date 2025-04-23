@@ -6,8 +6,13 @@ import org.umc.spring.domain.common.BaseEntity;
 import org.umc.spring.domain.enums.Gender;
 import org.umc.spring.domain.enums.MemberStatus;
 import org.umc.spring.domain.enums.SocialType;
+import org.umc.spring.domain.mapping.MemberAgree;
+import org.umc.spring.domain.mapping.MemberMission;
+import org.umc.spring.domain.mapping.MemberPrefer;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,6 +24,18 @@ public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToMany(mappedBy = "member")
+    private List<MemberAgree> memberAgrees = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<MemberPrefer> memberPrefers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<MemberMission> memberMissions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Review> reviews = new ArrayList<>();
 
     @Column(nullable = false, length = 20)
     private String name;

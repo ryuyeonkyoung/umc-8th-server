@@ -5,6 +5,9 @@ import lombok.*;
 import org.umc.spring.domain.common.BaseEntity;
 import org.umc.spring.domain.enums.ReviewStatus;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -15,6 +18,12 @@ public class Review extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToMany(mappedBy = "review")
+    private List<ReviewImage> reviewImageList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "review")
+    private List<Comment> commentList = new ArrayList<>();
 
     @Lob
     @Column(nullable = false)
