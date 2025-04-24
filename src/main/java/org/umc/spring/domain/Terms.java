@@ -19,7 +19,7 @@ public class Terms extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "terms")
+    @OneToMany(mappedBy = "terms", cascade = CascadeType.PERSIST)
     private Set<MemberAgree> memberAgreeList = new HashSet<>();
 
     @Column(nullable = false, length = 50)

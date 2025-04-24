@@ -25,16 +25,16 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
     private Set<MemberAgree> memberAgrees = new HashSet<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
     private Set<MemberPrefer> memberPrefers = new HashSet<>();
 
     @OneToMany(mappedBy = "member")
     private Set<MemberMission> memberMissions = new HashSet<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private Set<Review> reviews = new HashSet<>();
 
     @Column(nullable = false, length = 20)
