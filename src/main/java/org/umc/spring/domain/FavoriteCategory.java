@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.umc.spring.domain.mapping.MemberPrefer;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -19,7 +19,7 @@ public class FavoriteCategory {
     private Long id;
 
     @OneToMany(mappedBy = "favoriteCategory")
-    private List<MemberPrefer> memberPrefers = new ArrayList<>();
+    private Set<MemberPrefer> memberPrefers = new HashSet<>();
 
     @Column(nullable = false, length = 50)
     private String name;

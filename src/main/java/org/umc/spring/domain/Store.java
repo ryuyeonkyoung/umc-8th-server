@@ -6,8 +6,8 @@ import org.umc.spring.domain.common.BaseEntity;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -21,7 +21,7 @@ public class Store extends BaseEntity {
     private Long id;
 
     @OneToMany(mappedBy = "store")
-    private List<Review> reviews = new ArrayList<>();
+    private Set<Review> reviews = new HashSet<>();
 
     @Column(nullable = false, length = 50)
     private String name;
