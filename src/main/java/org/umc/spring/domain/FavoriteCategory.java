@@ -18,7 +18,7 @@ public class FavoriteCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "favoriteCategory")
+    @OneToMany(mappedBy = "favoriteCategory", cascade = CascadeType.PERSIST)
     private Set<MemberPrefer> memberPrefers = new HashSet<>();
 
     @Column(nullable = false, length = 50)
