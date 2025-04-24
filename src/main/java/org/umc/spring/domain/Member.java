@@ -11,8 +11,8 @@ import org.umc.spring.domain.mapping.MemberMission;
 import org.umc.spring.domain.mapping.MemberPrefer;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -26,16 +26,16 @@ public class Member extends BaseEntity {
     private Long id;
 
     @OneToMany(mappedBy = "member")
-    private List<MemberAgree> memberAgrees = new ArrayList<>();
+    private Set<MemberAgree> memberAgrees = new HashSet<>();
 
     @OneToMany(mappedBy = "member")
-    private List<MemberPrefer> memberPrefers = new ArrayList<>();
+    private Set<MemberPrefer> memberPrefers = new HashSet<>();
 
     @OneToMany(mappedBy = "member")
-    private List<MemberMission> memberMissions = new ArrayList<>();
+    private Set<MemberMission> memberMissions = new HashSet<>();
 
     @OneToMany(mappedBy = "member")
-    private List<Review> reviews = new ArrayList<>();
+    private Set<Review> reviews = new HashSet<>();
 
     @Column(nullable = false, length = 20)
     private String name;

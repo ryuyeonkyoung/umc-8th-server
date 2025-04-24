@@ -3,8 +3,8 @@ package org.umc.spring.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -18,7 +18,7 @@ public class Region {
     private Long id;
 
     @OneToMany(mappedBy = "region")
-    private List<Store> stores = new ArrayList<>();
+    private Set<Store> stores = new HashSet<>();
 
     @Column(nullable = false, length = 50)
     private String name;

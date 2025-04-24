@@ -6,7 +6,9 @@ import org.umc.spring.domain.common.BaseEntity;
 import org.umc.spring.domain.enums.ReviewStatus;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -23,7 +25,7 @@ public class Review extends BaseEntity {
     private List<ReviewImage> reviewImageList = new ArrayList<>();
 
     @OneToMany(mappedBy = "review")
-    private List<Comment> commentList = new ArrayList<>();
+    private Set<Comment> commentList = new HashSet<>();
 
     @Lob
     @Column(nullable = false)

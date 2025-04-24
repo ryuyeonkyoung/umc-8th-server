@@ -7,8 +7,8 @@ import org.umc.spring.domain.enums.MissionStatus;
 import org.umc.spring.domain.mapping.MemberMission;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -22,7 +22,7 @@ public class Mission extends BaseEntity {
     private Long id;
 
     @OneToMany(mappedBy = "member")
-    private List<MemberMission> memberMissions = new ArrayList<>();
+    private Set<MemberMission> memberMissions = new HashSet<>();
 
     @Lob
     @Column(nullable = false)
