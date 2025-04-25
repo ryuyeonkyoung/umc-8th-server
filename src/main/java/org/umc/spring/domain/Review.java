@@ -21,10 +21,10 @@ public class Review extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval=true)
     private List<ReviewImage> reviewImageList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval=true)
     private Set<Comment> commentList = new HashSet<>();
 
     @Lob
