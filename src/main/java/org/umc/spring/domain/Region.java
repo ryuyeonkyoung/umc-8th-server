@@ -17,7 +17,7 @@ public class Region {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "region", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "region", cascade = CascadeType.ALL, orphanRemoval=true)
     private Set<Store> stores = new HashSet<>();
 
     @Column(nullable = false, length = 50)

@@ -31,10 +31,10 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
     private Set<MemberPrefer> memberPrefers = new HashSet<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", orphanRemoval=true)
     private Set<MemberMission> memberMissions = new HashSet<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval=true)
     private Set<Review> reviews = new HashSet<>();
 
     @Column(nullable = false, length = 20)
