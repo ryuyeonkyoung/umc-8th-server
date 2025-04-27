@@ -33,6 +33,7 @@ public class Store extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String address;
 
+    @Version
     @Column(nullable = false)
     private Float score;
 

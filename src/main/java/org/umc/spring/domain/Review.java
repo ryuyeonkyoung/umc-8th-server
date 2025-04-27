@@ -39,9 +39,11 @@ public class Review extends BaseEntity {
     @Column(nullable = false)
     private String context;
 
+    @Version
     @Column(nullable = false)
     private Float rating;
 
+    @Version
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'ACTIVE'")
     private ReviewStatus status;

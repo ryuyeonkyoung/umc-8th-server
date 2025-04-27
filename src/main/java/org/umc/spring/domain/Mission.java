@@ -31,6 +31,7 @@ public class Mission extends BaseEntity {
     @Column(nullable = false, columnDefinition = "INT DEFAULT 1000")
     private Integer minSpendMoney;
 
+    @Version
     @Column(nullable = false)
     private Integer rewardPoints;
 
@@ -40,6 +41,7 @@ public class Mission extends BaseEntity {
     @Column(nullable = false)
     private LocalDate deadline;
 
+    @Version
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "VARCHAR(15) DEFAULT 'CHALLENGING'")
     private MissionStatus status;
