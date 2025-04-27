@@ -27,4 +27,11 @@ public class Comment extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'ACTIVE'")
     private CommentStatus status;
+
+    @PrePersist
+    private void prePersist() {
+        if (this.status == null) {
+            this.status = CommentStatus.ACTIVE;
+        }
+    }
 }

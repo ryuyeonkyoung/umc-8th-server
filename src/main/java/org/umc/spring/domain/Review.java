@@ -47,4 +47,12 @@ public class Review extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'ACTIVE'")
     private ReviewStatus status;
+
+    // Review.java
+    @PrePersist
+    private void prePersist() {
+        if (this.status == null) {
+            this.status = ReviewStatus.ACTIVE;
+        }
+    }
 }

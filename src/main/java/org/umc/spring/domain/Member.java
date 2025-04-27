@@ -76,4 +76,14 @@ public class Member extends BaseEntity {
     private MemberStatus status;
 
     private LocalDate inactiveDate;
+
+    @PrePersist
+    private void prePersist() {
+        if (this.point == null) {
+            this.point = 0;
+        }
+        if (this.status == null) {
+            this.status = MemberStatus.ACTIVE;
+        }
+    }
 }
