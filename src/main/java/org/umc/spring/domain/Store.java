@@ -51,4 +51,14 @@ public class Store extends BaseEntity {
 
     @Column(nullable = false, columnDefinition = "TIME DEFAULT '23:59:00'")
     private LocalTime closeTime;
+
+    @PrePersist
+    private void prePersist() {
+        if (this.openTime == null) {
+            this.openTime = LocalTime.of(8, 0);
+        }
+        if (this.closeTime == null) {
+            this.closeTime = LocalTime.of(23, 59);
+        }
+    }
 }

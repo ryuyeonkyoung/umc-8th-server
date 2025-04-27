@@ -45,4 +45,14 @@ public class Mission extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "VARCHAR(15) DEFAULT 'CHALLENGING'")
     private MissionStatus status;
+
+    @PrePersist
+    private void prePersist() {
+        if (this.minSpendMoney == null) {
+            this.minSpendMoney = 1000;
+        }
+        if (this.status == null) {
+            this.status = MissionStatus.IN_PROGRESS;
+        }
+    }
 }

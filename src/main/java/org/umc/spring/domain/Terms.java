@@ -31,4 +31,11 @@ public class Terms extends BaseEntity {
 
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean optional;
+
+    @PrePersist
+    private void prePersist() {
+        if (this.optional == null) {
+            this.optional = false;
+        }
+    }
 }
