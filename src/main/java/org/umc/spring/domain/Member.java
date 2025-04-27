@@ -66,9 +66,11 @@ public class Member extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String email;
 
+    @Version
     @Column(nullable = false, length = 20, columnDefinition = "INT DEFAULT 0")
     private Integer point = 0; // 초기값 설정
 
+    @Version
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'ACTIVE'")
     private MemberStatus status;
