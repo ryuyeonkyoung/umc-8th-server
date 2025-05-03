@@ -19,6 +19,7 @@ public class Terms extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Builder.Default
     @OneToMany(mappedBy = "terms", cascade = CascadeType.PERSIST)
     private Set<MemberAgree> memberAgreeList = new HashSet<>();
 

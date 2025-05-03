@@ -25,15 +25,19 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
     private Set<MemberAgree> memberAgrees = new HashSet<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
     private Set<MemberPrefer> memberPrefers = new HashSet<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "member", orphanRemoval=true)
     private Set<MemberMission> memberMissions = new HashSet<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval=true)
     private Set<Review> reviews = new HashSet<>();
 
@@ -66,9 +70,10 @@ public class Member extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String email;
 
+    @Builder.Default
     @Version
-    @Column(nullable = false, length = 20, columnDefinition = "INT DEFAULT 0")
-    private Integer point = 0; // 초기값 설정
+    @Column(nullable = false, length = 20)
+    private Integer point = 0;
 
     @Version
     @Enumerated(EnumType.STRING)

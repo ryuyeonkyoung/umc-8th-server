@@ -20,6 +20,7 @@ public class Store extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Builder.Default
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private Set<Review> reviews = new HashSet<>();
 
