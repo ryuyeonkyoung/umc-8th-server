@@ -3,7 +3,6 @@ package org.umc.spring.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.umc.spring.domain.common.BaseEntity;
-import org.umc.spring.domain.enums.MissionStatus;
 import org.umc.spring.domain.mapping.MemberMission;
 
 import java.time.LocalDate;
@@ -21,8 +20,13 @@ public class Mission extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval=true)
+    @Builder.Default
+    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL, orphanRemoval=true)
     private Set<MemberMission> memberMissions = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "store_id", nullable = false)
+    private Store store;
 
     @Lob
     @Column(nullable = false)
@@ -41,18 +45,4 @@ public class Mission extends BaseEntity {
     @Column(nullable = false)
     private LocalDate deadline;
 
-    @Version
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "VARCHAR(15) DEFAULT 'CHALLENGING'")
-    private MissionStatus status;
-
-    @PrePersist
-    private void prePersist() {
-        if (this.minSpendMoney == null) {
-            this.minSpendMoney = 1000;
-        }
-        if (this.status == null) {
-            this.status = MissionStatus.IN_PROGRESS;
-        }
-    }
 }

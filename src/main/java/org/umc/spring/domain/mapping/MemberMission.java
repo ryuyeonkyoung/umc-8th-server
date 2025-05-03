@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.umc.spring.domain.Member;
 import org.umc.spring.domain.Mission;
 import org.umc.spring.domain.common.BaseEntity;
-import org.umc.spring.domain.enums.MissionStatus;
 
 @Entity
 @Getter
@@ -28,8 +27,4 @@ public class MemberMission extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'IN_PROGRESS'")
-    private MissionStatus status;
 }

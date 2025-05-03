@@ -21,9 +21,11 @@ public class Review extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Builder.Default
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval=true)
     private List<ReviewImage> reviewImageList = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval=true)
     private Set<Comment> commentList = new HashSet<>();
 
