@@ -35,7 +35,6 @@ public class Mission extends BaseEntity {
     @Column(nullable = false, columnDefinition = "INT DEFAULT 1000")
     private Integer minSpendMoney;
 
-    @Version
     @Column(nullable = false)
     private Integer rewardPoints;
 
@@ -44,5 +43,10 @@ public class Mission extends BaseEntity {
 
     @Column(nullable = false)
     private LocalDate deadline;
+
+    @Version
+    @Builder.Default
+    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
+    private Long version = 0L;
 
 }
