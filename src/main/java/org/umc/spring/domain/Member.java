@@ -57,7 +57,7 @@ public class Member extends BaseEntity {
     @Column(nullable = false, length = 20)
     private String phoneNumber;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean phoneVerified;
 
     @Enumerated(EnumType.STRING)
@@ -71,16 +71,19 @@ public class Member extends BaseEntity {
     private String email;
 
     @Builder.Default
-    @Version
     @Column(nullable = false, length = 20)
     private Integer point = 0;
 
-    @Version
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'ACTIVE'")
     private MemberStatus status;
 
     private LocalDate inactiveDate;
+
+    @Version
+    @Builder.Default
+    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
+    private Long version = 0L;
 
     @PrePersist
     private void prePersist() {

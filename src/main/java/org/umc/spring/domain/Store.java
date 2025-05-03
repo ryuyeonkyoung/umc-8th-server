@@ -34,7 +34,6 @@ public class Store extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String address;
 
-    @Version
     @Column(nullable = false)
     private Float score;
 
@@ -52,6 +51,11 @@ public class Store extends BaseEntity {
 
     @Column(nullable = false, columnDefinition = "TIME DEFAULT '23:59:00'")
     private LocalTime closeTime;
+
+    @Version
+    @Builder.Default
+    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
+    private Long version = 0L;
 
     @PrePersist
     private void prePersist() {
