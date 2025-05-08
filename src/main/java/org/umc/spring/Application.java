@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.umc.spring.dto.MemberProfileResponseDto;
+import org.umc.spring.service.MemberService.MemberQueryService;
 import org.umc.spring.service.MissionService.MissionQueryService;
 import org.umc.spring.service.ReviewService.ReviewCommandService;
 
@@ -24,6 +26,7 @@ public class Application {
 		return args -> {
 			MissionQueryService missionQueryService = context.getBean(MissionQueryService.class);
 			ReviewCommandService reviewQueryService = context.getBean(ReviewCommandService.class);
+			MemberQueryService memberQueryService = context.getBean(MemberQueryService.class);
 
 			// loadHomeMissions 테스트
 			Long testMemberId = 1L;
@@ -44,28 +47,16 @@ public class Application {
 
 			boolean result = reviewQueryService.setStoreReviews(testStoreId, testMemberId, testContext, testRating);
 			System.out.println("Review saved successfully: " + result);
+
+			// loadMemberProfile 테스트
+			try {
+				System.out.println("Executing loadMemberProfile with testMemberId: " + testMemberId);
+				MemberProfileResponseDto memberProfile = memberQueryService.loadMemberProfile(testMemberId);
+				System.out.println("Member Profile: " + memberProfile);
+			} catch (IllegalArgumentException e) {
+				System.err.println("Error: " + e.getMessage());
+			}
+
 		};
 	}
-
-
-//	@Bean
-//	public CommandLineRunner run(ApplicationContext context) {
-//		return args -> {
-//			StoreQueryService storeService = context.getBean(StoreQueryService.class);
-//
-//			// 파라미터 값 설정
-//			String name = "요아정";
-//			Float score = 4.0f;
-//
-//			// 쿼리 메서드 호출 및 쿼리 문자열과 파라미터 출력
-//			System.out.println("Executing findStoresByNameAndScore with parameters:");
-//			System.out.println("Name: " + name);
-//			System.out.println("Score: " + score);
-//
-//			storeService.findStoresByNameAndScore(name, score)
-//					.forEach(System.out::println);
-//		};
-//	}
-
-
 }
