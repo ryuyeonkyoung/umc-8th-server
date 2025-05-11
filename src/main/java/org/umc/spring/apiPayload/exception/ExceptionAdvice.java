@@ -33,6 +33,9 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     @Value("${SLACK_WEBHOOK_URL}")
     private String slackWebhookUrl;
 
+    @Value("${spring.profiles.active:default}")
+    private String activeProfile;
+
     @ExceptionHandler
     public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
         String errorMessage = e.getConstraintViolations().stream()
@@ -62,6 +65,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> exception(Exception e, WebRequest request) {
         e.printStackTrace();
 
+        // TODO: 개발/로컬 서버 알림 분리
         // 에러 정보 생성
         Map<String, Object> errorDetails = new LinkedHashMap<>();
         errorDetails.put("timestamp", LocalDateTime.now());
@@ -134,31 +138,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         );
     }
 
-//    @ExceptionHandler(value = Exception.class)
-//    public ResponseEntity<Object> handleAllExceptions(Exception e, HttpServletRequest request) {
-//        log.error("Unhandled exception occurred", e);
-//
-//        // 에러 정보 생성
-//        Map<String, Object> errorDetails = new LinkedHashMap<>();
-//        errorDetails.put("timestamp", LocalDateTime.now());
-//        errorDetails.put("message", e.getMessage());
-//        errorDetails.put("path", request.getRequestURI());
-//
-//        // Webhook 전송
-//        sendErrorToWebhook(discordWebhookUrl, errorDetails);
-////        sendErrorToWebhook(slackWebhookUrl, errorDetails);
-//
-//        // 응답 생성
-//        return handleExceptionInternalFalse(
-//                e,
-//                ErrorStatus._INTERNAL_SERVER_ERROR,
-//                HttpHeaders.EMPTY,
-//                ErrorStatus._INTERNAL_SERVER_ERROR.getHttpStatus(),
-//                new ServletWebRequest(request),
-//                errorDetails.toString()
-//        );
-//    }
-
+    // TODO: 단일 책임 원칙을 준수하기 위해 service로 분리
     private void sendErrorToWebhook(String webhookUrl, Map<String, Object> errorDetails) {
         RestTemplate restTemplate = new RestTemplate();
 
