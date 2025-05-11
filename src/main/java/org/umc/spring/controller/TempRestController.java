@@ -29,4 +29,9 @@ public class TempRestController {
         return ApiResponse.onSuccess(TempConverter.toTempExceptionDTO(flag));
     }
 
+    @GetMapping("/500-error")
+    public void forceError() {
+        throw new RuntimeException(" [mission07]  500 에러 발생");
+    }
+
 }
