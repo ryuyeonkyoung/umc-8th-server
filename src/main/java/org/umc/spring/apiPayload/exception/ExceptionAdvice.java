@@ -3,11 +3,13 @@ package org.umc.spring.apiPayload.exception;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -15,6 +17,8 @@ import org.umc.spring.apiPayload.ApiResponse;
 import org.umc.spring.apiPayload.code.ErrorReasonDTO;
 import org.umc.spring.apiPayload.code.status.ErrorStatus;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -23,6 +27,11 @@ import java.util.Optional;
 @RestControllerAdvice(annotations = {RestController.class})
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
+    @Value("${DISCORD_WEBHOOK_URL}")
+    private String discordWebhookUrl;
+
+    @Value("${SLACK_WEBHOOK_URL}")
+    private String slackWebhookUrl;
 
     @ExceptionHandler
     public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
@@ -53,6 +62,17 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> exception(Exception e, WebRequest request) {
         e.printStackTrace();
 
+        // 에러 정보 생성
+        Map<String, Object> errorDetails = new LinkedHashMap<>();
+        errorDetails.put("timestamp", LocalDateTime.now());
+        errorDetails.put("message", e.getMessage());
+        errorDetails.put("path", ((ServletWebRequest) request).getRequest().getRequestURI());
+
+        // Webhook 전송
+        sendErrorToWebhook(discordWebhookUrl, errorDetails);
+//        sendErrorToWebhook(slackWebhookUrl, errorDetails);
+
+        // 응답 생성
         return handleExceptionInternalFalse(e, ErrorStatus._INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY, ErrorStatus._INTERNAL_SERVER_ERROR.getHttpStatus(),request, e.getMessage());
     }
 
@@ -112,5 +132,48 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                 errorCommonStatus.getHttpStatus(),
                 request
         );
+    }
+
+//    @ExceptionHandler(value = Exception.class)
+//    public ResponseEntity<Object> handleAllExceptions(Exception e, HttpServletRequest request) {
+//        log.error("Unhandled exception occurred", e);
+//
+//        // 에러 정보 생성
+//        Map<String, Object> errorDetails = new LinkedHashMap<>();
+//        errorDetails.put("timestamp", LocalDateTime.now());
+//        errorDetails.put("message", e.getMessage());
+//        errorDetails.put("path", request.getRequestURI());
+//
+//        // Webhook 전송
+//        sendErrorToWebhook(discordWebhookUrl, errorDetails);
+////        sendErrorToWebhook(slackWebhookUrl, errorDetails);
+//
+//        // 응답 생성
+//        return handleExceptionInternalFalse(
+//                e,
+//                ErrorStatus._INTERNAL_SERVER_ERROR,
+//                HttpHeaders.EMPTY,
+//                ErrorStatus._INTERNAL_SERVER_ERROR.getHttpStatus(),
+//                new ServletWebRequest(request),
+//                errorDetails.toString()
+//        );
+//    }
+
+    private void sendErrorToWebhook(String webhookUrl, Map<String, Object> errorDetails) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        Map<String, String> payload = new HashMap<>();
+        payload.put("content", "에러 발생: " + errorDetails.toString());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Map<String, String>> request = new HttpEntity<>(payload, headers);
+
+        try {
+            restTemplate.postForEntity(webhookUrl, request, String.class);
+        } catch (Exception ex) {
+            log.error("Webhook 전송 실패: " + webhookUrl, ex);
+        }
     }
 }
