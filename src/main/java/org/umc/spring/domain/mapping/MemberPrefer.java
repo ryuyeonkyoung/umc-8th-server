@@ -1,11 +1,8 @@
 package org.umc.spring.domain.mapping;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.umc.spring.domain.FavoriteCategory;
+import lombok.*;
+import org.umc.spring.domain.FoodCategory;
 import org.umc.spring.domain.Member;
 import org.umc.spring.domain.common.BaseEntity;
 
@@ -25,6 +22,17 @@ public class MemberPrefer extends BaseEntity {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "favorite_category_id", nullable = false)
-    private FavoriteCategory favoriteCategory;
+    @JoinColumn(name = "food_category_id", nullable = false)
+    private FoodCategory foodCategory;
+
+    public void setMember(Member member){
+        if(this.member != null)
+            member.getMemberPrefers().remove(this);
+        this.member = member;
+        member.getMemberPrefers().add(this);
+    }
+
+    public void setFoodCategory(FoodCategory foodCategory){
+        this.foodCategory = foodCategory;
+    }
 }
