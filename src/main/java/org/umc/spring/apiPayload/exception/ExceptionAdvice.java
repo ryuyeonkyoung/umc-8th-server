@@ -36,7 +36,8 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     @Value("${spring.profiles.active:default}")
     private String activeProfile;
 
-    @ExceptionHandler
+    // 1) ConstraintViolationException 전용 처리
+    @ExceptionHandler // Controller 내에서 특정 예외를 잡아 처리
     public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
         String errorMessage = e.getConstraintViolations().stream()
                 .map(constraintViolation -> constraintViolation.getMessage())
@@ -46,6 +47,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         return handleExceptionInternalConstraint(e, ErrorStatus.valueOf(errorMessage), HttpHeaders.EMPTY,request);
     }
 
+    // 2) MethodArgumentNotValidException 전용 처리
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
@@ -61,25 +63,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         return handleExceptionInternalArgs(e,HttpHeaders.EMPTY,ErrorStatus.valueOf("_BAD_REQUEST"),request,errors);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<Object> exception(Exception e, WebRequest request) {
-        e.printStackTrace();
-
-        // TODO: 개발/로컬 서버 알림 분리
-        // 에러 정보 생성
-        Map<String, Object> errorDetails = new LinkedHashMap<>();
-        errorDetails.put("timestamp", LocalDateTime.now());
-        errorDetails.put("message", e.getMessage());
-        errorDetails.put("path", ((ServletWebRequest) request).getRequest().getRequestURI());
-
-        // Webhook 전송
-        sendErrorToWebhook(discordWebhookUrl, errorDetails);
-//        sendErrorToWebhook(slackWebhookUrl, errorDetails);
-
-        // 응답 생성
-        return handleExceptionInternalFalse(e, ErrorStatus._INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY, ErrorStatus._INTERNAL_SERVER_ERROR.getHttpStatus(),request, e.getMessage());
-    }
-
+    // 3) GeneralException (Custom Exception) 전용 처리
     @ExceptionHandler(value = GeneralException.class)
     public ResponseEntity onThrowException(GeneralException generalException, HttpServletRequest request) {
         ErrorReasonDTO errorReasonHttpStatus = generalException.getErrorReasonHttpStatus();
@@ -100,6 +84,31 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                 reason.getHttpStatus(),
                 webRequest
         );
+    }
+
+    // 4) 그 외 모든 Exception 처리 (최후의 보루)
+    @ExceptionHandler
+    public ResponseEntity<Object> exception(Exception e, WebRequest request) {
+        e.printStackTrace();
+
+        // 에러 정보 생성
+        Map<String, Object> errorDetails = new LinkedHashMap<>();
+        errorDetails.put("timestamp", LocalDateTime.now());
+        errorDetails.put("message", e.getMessage());
+        errorDetails.put("path", ((ServletWebRequest) request).getRequest().getRequestURI());
+
+        // Webhook 전송
+        if (activeProfile.equals("dev") || activeProfile.equals("prod")) {
+            errorDetails.put("profile", "dev");
+
+            sendErrorToWebhook(discordWebhookUrl, errorDetails);
+//        sendErrorToWebhook(slackWebhookUrl, errorDetails);
+        } else {
+            errorDetails.put("profile", "local");
+        }
+
+        // 응답 생성
+        return handleExceptionInternalFalse(e, ErrorStatus._INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY, ErrorStatus._INTERNAL_SERVER_ERROR.getHttpStatus(),request, e.getMessage());
     }
 
     private ResponseEntity<Object> handleExceptionInternalFalse(Exception e, ErrorStatus errorCommonStatus,
