@@ -10,14 +10,14 @@ import org.umc.spring.apiPayload.code.status.SuccessStatus;
 
 @Getter
 @AllArgsConstructor
-@JsonPropertyOrder({"isSuccess", "code", "message", "result"})
+@JsonPropertyOrder({"isSuccess", "code", "message", "result"}) // JSON 출력 시 필드 순서를 지정
 public class ApiResponse<T> {
 
-    @JsonProperty("isSuccess")
+    @JsonProperty("isSuccess") // 자바 필드명과 JSON키를 매핑
     private final Boolean isSuccess;
     private final String code;
     private final String message;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_NULL) // 필드를 null로 설정 시 JSON에서 제외
     private T result;
 
 
