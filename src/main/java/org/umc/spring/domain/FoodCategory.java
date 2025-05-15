@@ -19,7 +19,7 @@ public class FoodCategory {
     private Long id;
 
     @Builder.Default
-    @OneToMany(mappedBy = "foodCategory", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "foodCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<MemberPrefer> memberPrefers = new HashSet<>();
 
     @Column(nullable = false, length = 50)
