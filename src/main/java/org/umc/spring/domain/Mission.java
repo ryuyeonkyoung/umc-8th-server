@@ -49,4 +49,16 @@ public class Mission extends BaseEntity {
     @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
     private Long version = 0L;
 
+    public void addMemberMission(MemberMission memberMission) {
+        if (memberMission == null || !this.memberMissions.contains(memberMission)) return;
+        this.memberMissions.add(memberMission);
+        memberMission.setMission(this);
+    }
+
+    public void removeMemberMission(MemberMission memberMission) {
+        if (memberMission == null || !this.memberMissions.contains(memberMission)) return;
+        this.memberMissions.remove(memberMission);
+        memberMission.setMission(null);
+    }
+
 }

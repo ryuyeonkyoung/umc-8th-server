@@ -53,7 +53,44 @@ public class Review extends BaseEntity {
     @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
     private Long version = 0L;
 
-    // Review.java
+    public void addReviewImage(ReviewImage reviewImage) {
+        if (reviewImage == null || this.reviewImageList.contains(reviewImage)) return;
+        this.reviewImageList.add(reviewImage);
+        reviewImage.setReview(this);
+    }
+
+    public void removeReviewImage(ReviewImage reviewImage) {
+        if (reviewImage == null || !this.reviewImageList.contains(reviewImage)) return;
+        this.reviewImageList.remove(reviewImage);
+        reviewImage.setReview(null);
+    }
+
+    public void addComment(Comment comment) {
+        if (comment == null || this.commentList.contains(comment)) return;
+        this.commentList.add(comment);
+        comment.setReview(this);
+    }
+
+    public void removeComment(Comment comment) {
+        if (comment == null || !this.commentList.contains(comment)) return;
+        this.commentList.remove(comment);
+        comment.setReview(null);
+    }
+
+    public void setStore(Store store) {
+        if (this.store != null) {
+            this.store.getReviews().remove(this);
+        }
+        this.store = store;
+    }
+
+    public void setMember(Member member) {
+        if (this.member != null) {
+            this.member.getReviews().remove(this);
+        }
+        this.member = member;
+    }
+
     @PrePersist
     private void prePersist() {
         if (this.status == null) {

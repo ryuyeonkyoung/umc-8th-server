@@ -20,6 +20,11 @@ public class Store extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Version
+    @Builder.Default
+    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
+    private Long version = 0L;
+
     @Builder.Default
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private Set<Review> reviews = new HashSet<>();
@@ -52,10 +57,24 @@ public class Store extends BaseEntity {
     @Column(nullable = false, columnDefinition = "TIME DEFAULT '23:59:00'")
     private LocalTime closeTime;
 
-    @Version
-    @Builder.Default
-    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
-    private Long version = 0L;
+    public void addReview(Review review) {
+        if (review == null || this.reviews.contains(review)) return;
+        this.reviews.add(review);
+        review.setStore(this);
+    }
+
+    public void removeReview(Review review) {
+        if (review == null || !this.reviews.contains(review)) return;
+        this.reviews.remove(review);
+        review.setStore(null);
+    }
+
+    public void setRegion(Region region) {
+        if (this.region != null) {
+            this.region.getStores().remove(this);
+        }
+        this.region = region;
+    }
 
     @PrePersist
     private void prePersist() {

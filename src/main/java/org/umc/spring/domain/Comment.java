@@ -28,6 +28,13 @@ public class Comment extends BaseEntity {
     @Column(nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'ACTIVE'")
     private CommentStatus status;
 
+    public void setReview(Review review) {
+        if (this.review != null) {
+            this.review.getCommentList().remove(this);
+        }
+        this.review = review;
+    }
+
     @PrePersist
     private void prePersist() {
         if (this.status == null) {

@@ -24,4 +24,16 @@ public class Region extends BaseEntity {
 
     @Column(nullable = false, length = 50)
     private String name;
+
+    public void addStore(Store store) {
+        if (store == null || this.stores.contains(store)) return;
+        this.stores.add(store);
+        store.setRegion(this);
+    }
+
+    public void removeStore(Store store) {
+        if (store == null || !this.stores.contains(store)) return;
+        this.stores.remove(store);
+        store.setRegion(null);
+    }
 }
