@@ -1,4 +1,4 @@
-package org.umc.spring.dto;
+package org.umc.spring.dto.review.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -7,7 +7,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.umc.spring.dto.MissionResponseDto;
+import org.umc.spring.dto.mission.response.MissionResponseDto;
 import org.umc.spring.repository.MissionRepository.MissionRepositoryCustom;
 
 import java.util.List;

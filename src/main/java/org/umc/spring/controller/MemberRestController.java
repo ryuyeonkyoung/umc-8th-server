@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.umc.spring.apiPayload.ApiResponse;
 import org.umc.spring.converter.MemberConverter;
 import org.umc.spring.domain.Member;
-import org.umc.spring.dto.MemberRequestDTO;
-import org.umc.spring.dto.MemberResponseDTO;
+import org.umc.spring.dto.member.request.MemberRequestDTO;
+import org.umc.spring.dto.member.response.MemberResponseDTO;
 import org.umc.spring.service.MemberService.MemberCommandService;
 
 @RestController

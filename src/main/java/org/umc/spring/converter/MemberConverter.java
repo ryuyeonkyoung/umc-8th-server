@@ -4,8 +4,8 @@ import org.umc.spring.domain.Member;
 import org.umc.spring.domain.enums.Gender;
 import org.umc.spring.domain.enums.MemberStatus;
 import org.umc.spring.domain.enums.SocialType;
-import org.umc.spring.dto.MemberRequestDTO;
-import org.umc.spring.dto.MemberResponseDTO;
+import org.umc.spring.dto.member.request.MemberRequestDTO;
+import org.umc.spring.dto.member.response.MemberResponseDTO;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
