@@ -32,4 +32,18 @@ public class MemberMission extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'CHALLENGE'")
     private MissionStatus status;
+
+    public void setMember(Member member) {
+        if (this.member != null) {
+            this.member.getMemberMissions().remove(this);
+        }
+        this.member = member;
+    }
+
+    public void setMission(Mission mission) {
+        if (this.mission != null) {
+            this.mission.getMemberMissions().remove(this);
+        }
+        this.mission = mission;
+    }
 }

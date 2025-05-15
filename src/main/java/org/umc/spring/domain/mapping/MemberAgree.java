@@ -28,4 +28,16 @@ public class MemberAgree extends BaseEntity {
     @JoinColumn(name = "terms_id", nullable = false)
     private Terms terms;
 
+    public void setMember(Member member){
+        if(this.member != null)
+            member.getMemberAgrees().remove(this);
+        this.member = member;
+    }
+
+    public void setTerms(Terms terms){
+        if(this.terms != null)
+            terms.getMemberAgrees().remove(this);
+        this.terms = terms;
+    }
+
 }

@@ -24,4 +24,9 @@ public class FoodCategory {
 
     @Column(nullable = false, length = 50)
     private String name;
+
+    public void addMemberPrefer(MemberPrefer memberPrefer) {
+        this.memberPrefers.add(memberPrefer);
+        memberPrefer.setFoodCategory(this);
+    }
 }

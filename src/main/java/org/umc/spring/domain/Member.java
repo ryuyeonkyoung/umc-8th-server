@@ -25,6 +25,11 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Version
+    @Builder.Default
+    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
+    private Long version = 0L;
+
     @Builder.Default
     @OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<MemberAgree> memberAgrees = new HashSet<>();
@@ -80,10 +85,54 @@ public class Member extends BaseEntity {
 
     private LocalDate inactiveDate;
 
-    @Version
-    @Builder.Default
-    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
-    private Long version = 0L;
+    public void addMemberPrefer(MemberPrefer memberPrefer) {
+        if (memberPrefer == null || memberPrefers.contains(memberPrefer)) return;
+        this.memberPrefers.add(memberPrefer);
+        memberPrefer.setMember(this);
+    }
+
+    public void addMemberAgree(MemberAgree memberAgree) {
+        if (memberAgree == null || memberAgrees.contains(memberAgree)) return;
+        this.memberAgrees.add(memberAgree);
+        memberAgree.setMember(this);
+    }
+
+    public void addMemberMission(MemberMission memberMission) {
+        if (memberMission == null || memberMissions.contains(memberMission)) return;
+        this.memberMissions.add(memberMission);
+        memberMission.setMember(this);
+    }
+
+    public void addReview(Review review) {
+        if (review == null || reviews.contains(review)) return;
+        this.reviews.add(review);
+        review.setMember(this);
+    }
+
+    public void removeMemberPrefer(MemberPrefer memberPrefer) {
+        if (memberPrefer == null || !this.memberPrefers.contains(memberPrefer)) return;
+        this.memberPrefers.remove(memberPrefer);
+        memberPrefer.setMember(null);
+    }
+
+    public void removeMemberAgree(MemberAgree memberAgree) {
+        if (memberAgree == null || !this.memberAgrees.contains(memberAgree)) return;
+        this.memberAgrees.remove(memberAgree);
+        memberAgree.setMember(null);
+    }
+
+    public void removeMemberMission(MemberMission memberMission) {
+        if (memberMission == null || !this.memberMissions.contains(memberMission)) return;
+        this.memberMissions.remove(memberMission);
+        memberMission.setMember(null);
+    }
+
+    public void removeReview(Review review) {
+        if (review == null || !this.reviews.contains(review)) return;
+        this.reviews.remove(review);
+        review.setMember(null);
+    }
+
 
     @PrePersist
     private void prePersist() {
