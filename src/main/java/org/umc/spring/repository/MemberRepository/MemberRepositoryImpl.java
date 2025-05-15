@@ -15,8 +15,8 @@ import org.umc.spring.domain.QMission;
 import org.umc.spring.domain.QStore;
 import org.umc.spring.domain.enums.MissionStatus;
 import org.umc.spring.domain.mapping.QMemberMission;
-import org.umc.spring.dto.CursorPagedMissionResponseDto;
-import org.umc.spring.dto.MemberProfileResponseDto;
+import org.umc.spring.dto.mission.response.CursorPagedMissionResponseDto;
+import org.umc.spring.dto.member.response.MemberProfileResponseDto;
 
 import java.time.LocalDateTime;
 import java.util.List;

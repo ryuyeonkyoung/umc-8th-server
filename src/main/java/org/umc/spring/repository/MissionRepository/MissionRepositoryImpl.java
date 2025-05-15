@@ -10,7 +10,7 @@ import org.umc.spring.domain.QMission;
 import org.umc.spring.domain.QRegion;
 import org.umc.spring.domain.QStore;
 import org.umc.spring.domain.mapping.QMemberMission;
-import org.umc.spring.dto.MissionResponseDto;
+import org.umc.spring.dto.mission.response.MissionResponseDto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

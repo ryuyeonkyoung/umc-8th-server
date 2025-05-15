@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.umc.spring.domain.enums.MissionStatus;
-import org.umc.spring.dto.MemberProfileResponseDto;
+import org.umc.spring.dto.member.response.MemberProfileResponseDto;
 import org.umc.spring.service.MemberService.MemberQueryService;
 import org.umc.spring.service.MissionService.MissionQueryService;
 import org.umc.spring.service.ReviewService.ReviewCommandService;
