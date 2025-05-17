@@ -2,6 +2,7 @@ package org.umc.spring.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.umc.spring.apiPayload.ApiResponse;
 import org.umc.spring.converter.ReviewConverter;
@@ -14,6 +15,7 @@ import org.umc.spring.validation.annotation.ExistStore;
 @RestController
 @RequestMapping("/stores/{storeId}/reviews")
 @RequiredArgsConstructor
+@Validated
 public class StoreReviewController {
 
     private final ReviewCommandService reviewService;
