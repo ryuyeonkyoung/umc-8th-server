@@ -16,7 +16,7 @@ import org.umc.spring.service.MemberService.MemberCommandService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/members")
-public class MemberRestController {
+public class MemberController {
 
     private final MemberCommandService memberCommandService;
 
