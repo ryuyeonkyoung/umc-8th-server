@@ -38,5 +38,3 @@ out/
 
 src/main/resources/application.yml
 .gitignore
-
-***/resources/sql
