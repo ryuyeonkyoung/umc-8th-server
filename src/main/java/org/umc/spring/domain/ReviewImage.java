@@ -24,7 +24,7 @@ public class ReviewImage extends BaseEntity {
 
     public void setReview(Review review) {
         if (this.review != null) {
-            this.review.getReviewImageList().remove(this);
+            this.review.getReviewImages().remove(this);
         }
         this.review = review;
     }

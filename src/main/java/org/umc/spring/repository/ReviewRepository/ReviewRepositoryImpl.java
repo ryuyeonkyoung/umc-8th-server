@@ -15,8 +15,8 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     // INSERT INTO review (store_id, member_id, context, rating, created_at)
     // VALUES ({store_id}, {member_id}, '{리뷰 내용}', {별점}, NOW());
     @Override
-    public Long saveReview(Review review) {
+    public Review saveReview(Review review) {
         entityManager.persist(review);
-        return review.getId(); // 저장된 엔티티의 ID 반환
+        return review;
     }
 }
