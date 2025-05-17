@@ -12,10 +12,6 @@ import java.time.LocalTime;
 public class StoreRequestDTO {
 
     @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
     public static class CreateDto {
         @NotBlank
         @Size(max = 50)

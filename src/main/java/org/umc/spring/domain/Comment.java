@@ -30,7 +30,7 @@ public class Comment extends BaseEntity {
 
     public void setReview(Review review) {
         if (this.review != null) {
-            this.review.getCommentList().remove(this);
+            this.review.getComments().remove(this);
         }
         this.review = review;
     }
