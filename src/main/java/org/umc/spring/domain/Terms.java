@@ -20,7 +20,7 @@ public class Terms extends BaseEntity {
     private Long id;
 
     @Builder.Default
-    @OneToMany(mappedBy = "terms", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "terms", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<MemberAgree> memberAgreeList = new HashSet<>();
 
     @Column(nullable = false, length = 50)

@@ -26,11 +26,11 @@ public class Member extends BaseEntity {
     private Long id;
 
     @Builder.Default
-    @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<MemberAgree> memberAgrees = new HashSet<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<MemberPrefer> memberPrefers = new HashSet<>();
 
     @Builder.Default
@@ -67,7 +67,7 @@ public class Member extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String address;
 
-    @Column(nullable = false, length = 50)
+//    @Column(nullable = false, length = 50)
     private String email;
 
     @Builder.Default

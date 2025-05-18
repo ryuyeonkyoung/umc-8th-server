@@ -1,4 +1,4 @@
-package org.umc.spring.dto;
+package org.umc.spring.dto.mission.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
