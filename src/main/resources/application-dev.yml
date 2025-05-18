@@ -1,0 +1,7 @@
+webhook:
+  discord-url: ${DISCORD_WEBHOOK_URL}
+  slack-url: ${SLACK_WEBHOOK_URL}
+
+#discord:
+#  webhook:
+#    url: https://discord.com/api/webhooks/...
