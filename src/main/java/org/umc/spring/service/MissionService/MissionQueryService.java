@@ -5,4 +5,5 @@ import org.umc.spring.dto.mission.response.MissionResponseDto;
 
 public interface MissionQueryService {
     Slice<MissionResponseDto> loadHomeMissions(Long memberId);
+    boolean existsById(Long id);
 }
