@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.umc.spring.apiPayload.ApiResponse;
@@ -52,13 +52,14 @@ public class MemberController {
             @Parameter(description = "페이지 번호(1부터 시작)")
             @RequestParam @CheckPage Integer page
     ) {
-        Page<Review> reviewPage = reviewQueryService.getMyReviews(memberId, page - 1);
+        Slice<Review> reviewSlice = reviewQueryService.getMyReviews(memberId, page - 1);
 
         // 페이지가 비어있을 경우 예외 처리
-        if(reviewPage.isEmpty()) {
+        if(reviewSlice.isEmpty()) {
             throw new PageHandler(ErrorStatus.PAGE_NO_DATA);
         }
 
-        return ApiResponse.onSuccess(ReviewConverter.toMyReviewListDTO(reviewPage));
+        return ApiResponse.onSuccess(ReviewConverter.toMyReviewListDTO(reviewSlice));
     }
 }
+
