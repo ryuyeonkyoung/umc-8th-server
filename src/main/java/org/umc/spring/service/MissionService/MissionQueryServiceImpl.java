@@ -12,7 +12,10 @@ import org.umc.spring.apiPayload.code.status.ErrorStatus;
 import org.umc.spring.apiPayload.exception.handler.StoreHandler;
 import org.umc.spring.domain.Mission;
 import org.umc.spring.domain.Store;
+import org.umc.spring.domain.enums.MissionStatus;
+import org.umc.spring.domain.mapping.MemberMission;
 import org.umc.spring.dto.mission.response.MissionResponseDTO;
+import org.umc.spring.repository.MemberMissionRepository.MemberMissionRepository;
 import org.umc.spring.repository.MissionRepository.MissionRepository;
 import org.umc.spring.service.StoreService.StoreQueryService;
 
@@ -25,6 +28,7 @@ public class MissionQueryServiceImpl implements MissionQueryService {
 
     private final MissionRepository missionRepository;
     private final StoreQueryService storeQueryService;
+    private final MemberMissionRepository memberMissionRepository;
 
     @Override
     public Slice<MissionResponseDTO> loadHomeMissions(Long memberId) {
@@ -53,5 +57,13 @@ public class MissionQueryServiceImpl implements MissionQueryService {
         // 가게별 미션 목록 조회
         return missionRepository.findAllByStore(store, pageRequest);
     }
-}
 
+    @Override
+    public Page<MemberMission> getMyMissions(Long memberId, MissionStatus status, Integer page) {
+        // 페이징 처리 (10개씩)
+        PageRequest pageRequest = PageRequest.of(page, 10);
+
+        // 회원별, 상태별 미션 목록 조회
+        return memberMissionRepository.findAllByMemberIdAndStatus(memberId, status, pageRequest);
+    }
+}
