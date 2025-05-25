@@ -1,16 +1,8 @@
 package org.umc.spring;
 
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.umc.spring.domain.enums.MissionStatus;
-import org.umc.spring.dto.member.response.MemberProfileResponseDto;
-import org.umc.spring.service.MemberService.MemberQueryService;
-import org.umc.spring.service.MissionService.MissionQueryService;
-import org.umc.spring.service.ReviewService.ReviewCommandService;
 
 @SpringBootApplication
 @EnableJpaAuditing
@@ -51,7 +43,7 @@ public class Application {
 //            // loadMemberProfile 테스트
 //            try {
 //                System.out.println("Executing loadMemberProfile with testMemberId: " + testMemberId);
-//                MemberProfileResponseDto memberProfile = memberQueryService.loadMemberProfile(testMemberId);
+//                MemberProfileResponseDTO memberProfile = memberQueryService.loadMemberProfile(testMemberId);
 //                System.out.println("Member Profile: " + memberProfile);
 //            } catch (IllegalArgumentException e) {
 //                System.err.println("Error: " + e.getMessage());
