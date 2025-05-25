@@ -11,13 +11,13 @@ import org.umc.spring.dto.store.response.StoreResponseDTO;
 import org.umc.spring.service.StoreService.StoreCommandService;
 
 @RestController
-@RequestMapping("/regions/{regionId}/stores")
+@RequestMapping("/regions")
 @RequiredArgsConstructor
-public class RegionStoreController {
+public class RegionController {
 
     private final StoreCommandService storeService;
 
-    @PostMapping
+    @PostMapping("/{regionId}/stores")
     public ApiResponse<StoreResponseDTO.CreateResultDto> createStore(@PathVariable Long regionId, @RequestBody @Valid StoreRequestDTO.CreateDto request) {
         Store store = storeService.addStore(request, regionId);
         return ApiResponse.onSuccess(StoreConverter.toCreateResultDTO(store));
