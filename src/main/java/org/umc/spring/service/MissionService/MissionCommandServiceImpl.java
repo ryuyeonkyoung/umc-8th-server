@@ -51,4 +51,30 @@ public class MissionCommandServiceImpl implements MissionCommandService {
         // 저장 및 반환
         return memberMissionRepository.save(memberMission);
     }
+
+    @Override
+    public MemberMission completeMission(Long missionId, Long memberId) {
+        // 미션은 이미 컨트롤러에서 @ExistMission으로 검증되었으므로 바로 조회
+        Mission mission = missionRepository.findById(missionId).get();
+
+        // 회원 존재 확인
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
+
+        // 해당 회원의 해당 미션이 존재하는지 확인
+        MemberMission memberMission = memberMissionRepository.findByMissionIdAndMemberId(missionId, memberId)
+                .orElseThrow(() -> new MissionHandler(ErrorStatus.MISSION_NOT_FOUND));
+
+        // 이미 완료된 미션인지 확인
+        if (MissionStatus.COMPLETE.equals(memberMission.getStatus())) {
+            throw new MissionHandler(ErrorStatus.MISSION_ALREADY_COMPLETED);
+        }
+
+        // 미션 상태 변경
+        memberMission.updateStatus(MissionStatus.COMPLETE);
+
+        // 저장 및 반환
+        return memberMissionRepository.save(memberMission);
+    }
 }
+
