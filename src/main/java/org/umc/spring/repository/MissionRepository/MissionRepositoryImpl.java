@@ -10,7 +10,7 @@ import org.umc.spring.domain.QMission;
 import org.umc.spring.domain.QRegion;
 import org.umc.spring.domain.QStore;
 import org.umc.spring.domain.mapping.QMemberMission;
-import org.umc.spring.dto.mission.response.MissionResponseDto;
+import org.umc.spring.dto.mission.response.MissionResponseDTO;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,7 +23,7 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<MissionResponseDto> findAvailableMissionsByRegion(Long regionId, Pageable pageable) {
+    public List<MissionResponseDTO> findAvailableMissionsByRegion(Long regionId, Pageable pageable) {
         QMission mission = QMission.mission;
         QMemberMission memberMission = new QMemberMission("memberMission");
         QStore store = QStore.store;
@@ -41,7 +41,7 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
         builder.and(mission.deadline.gt(LocalDate.now()));
 
         return queryFactory
-                .select(Projections.constructor(MissionResponseDto.class,
+                .select(Projections.constructor(MissionResponseDTO.class,
                         mission.id,
                         mission.minSpendMoney,
                         mission.rewardPoints,
