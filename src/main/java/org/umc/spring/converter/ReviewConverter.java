@@ -1,6 +1,6 @@
 package org.umc.spring.converter;
 
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 import org.umc.spring.domain.Review;
 import org.umc.spring.domain.enums.ReviewStatus;
 import org.umc.spring.dto.review.request.ReviewRequestDTO;
@@ -45,18 +45,19 @@ public class ReviewConverter {
                 .build();
     }
 
-    public static ReviewResponseDTO.MyReviewListDTO toMyReviewListDTO(Page<Review> reviewPage) {
-        List<ReviewResponseDTO.MyReviewPreviewDTO> reviewPreviewList = reviewPage.stream()
+    public static ReviewResponseDTO.MyReviewListDTO toMyReviewListDTO(Slice<Review> reviewSlice) {
+        List<ReviewResponseDTO.MyReviewPreviewDTO> reviewPreviewList = reviewSlice.stream()
                 .map(ReviewConverter::toMyReviewPreviewDTO)
                 .collect(Collectors.toList());
 
         return ReviewResponseDTO.MyReviewListDTO.builder()
                 .reviewList(reviewPreviewList)
                 .listSize(reviewPreviewList.size())
-                .totalPage(reviewPage.getTotalPages())
-                .totalElements(reviewPage.getTotalElements())
-                .isFirst(reviewPage.isFirst())
-                .isLast(reviewPage.isLast())
+                .totalPage(null) // Slice에서는 전체 페이지 수를 알 수 없음
+                .totalElements(null) // Slice에서는 전체 요소 수를 알 수 없음
+                .isFirst(reviewSlice.isFirst())
+                .isLast(reviewSlice.isLast())
+                .hasNext(reviewSlice.hasNext()) // hasNext 추가
                 .build();
     }
 }

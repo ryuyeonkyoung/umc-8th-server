@@ -46,5 +46,6 @@ public class ReviewResponseDTO {
         private Long totalElements;
         private Boolean isFirst;
         private Boolean isLast;
+        private Boolean hasNext; // 다음 페이지 존재 여부 표시 필드 추가
     }
 }
