@@ -10,7 +10,7 @@ import org.umc.spring.domain.enums.MissionStatus;
 @Builder
 @Getter
 @AllArgsConstructor
-public class CursorPagedMissionResponseDto {
+public class CursorPagedMissionResponseDTO {
         private Long missionId;           // 1
         private MissionStatus status;     // 2
         private Integer minSpendMoney;    // 3

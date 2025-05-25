@@ -15,8 +15,8 @@ import org.umc.spring.domain.QMission;
 import org.umc.spring.domain.QStore;
 import org.umc.spring.domain.enums.MissionStatus;
 import org.umc.spring.domain.mapping.QMemberMission;
-import org.umc.spring.dto.mission.response.CursorPagedMissionResponseDto;
-import org.umc.spring.dto.member.response.MemberProfileResponseDto;
+import org.umc.spring.dto.member.response.MemberProfileResponseDTO;
+import org.umc.spring.dto.mission.response.CursorPagedMissionResponseDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,7 +29,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public MemberProfileResponseDto findMemberProfileById(Long memberId) {
+    public MemberProfileResponseDTO findMemberProfileById(Long memberId) {
         QMember m = QMember.member;
 
         // SQL:
@@ -45,7 +45,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
             throw new IllegalArgumentException("회원 ID " + memberId + "에 해당하는 회원을 찾을 수 없습니다.");
         }
 
-        return MemberProfileResponseDto.builder()
+        return MemberProfileResponseDTO.builder()
                 .id(member.getId())
                 .nickname(member.getNickname())
                 .email(member.getEmail())
@@ -56,7 +56,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
 
     @Override
-    public Slice<CursorPagedMissionResponseDto> findCompletedMissionsByCursor(Long memberId, Long lastMissionId, MissionStatus memberMissionStatus) {
+    public Slice<CursorPagedMissionResponseDTO> findCompletedMissionsByCursor(Long memberId, Long lastMissionId, MissionStatus memberMissionStatus) {
         QMission m  = QMission.mission;
         QMemberMission mm = QMemberMission.memberMission;
         QStore s    = QStore.store;
@@ -64,9 +64,9 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
         // 커서 값(lastMissionId)이 없는 경우
         // cursor 첫 페이지 : 커서 없음 → 최신 순서대로 10개 + (11번째가 있으면 "다음 페이지 있음"을 표시하기 위해) 1개(다음 페이지 확인용) 조회
         if (lastMissionId == 0) {
-            List<CursorPagedMissionResponseDto > missions = queryFactory
+            List<CursorPagedMissionResponseDTO> missions = queryFactory
                     .select(Projections.constructor(
-                            CursorPagedMissionResponseDto .class,
+                            CursorPagedMissionResponseDTO.class,
                             mm.mission.id,               // 1
                             mm.status,                   // 2
                             m.minSpendMoney,             // 3
@@ -121,9 +121,9 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
             statusCond.and(mm.status.eq(memberMissionStatus));
         }
 
-        List<CursorPagedMissionResponseDto > missions = queryFactory
+        List<CursorPagedMissionResponseDTO> missions = queryFactory
                 .select(Projections.constructor(
-                        CursorPagedMissionResponseDto.class,
+                        CursorPagedMissionResponseDTO.class,
                         mm.mission.id,               // 1
                         mm.status,                   // 2
                         m.minSpendMoney,             // 3
