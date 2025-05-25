@@ -8,7 +8,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.umc.spring.dto.mission.response.MissionResponseDto;
-import org.umc.spring.repository.MissionRepository.MissionRepositoryCustom;
+import org.umc.spring.repository.MissionRepository.MissionRepository;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class MissionQueryServiceImpl implements MissionQueryService {
 
-    private final MissionRepositoryCustom missionRepository;
+    private final MissionRepository missionRepository;
 
     @Override
     public Slice<MissionResponseDto> loadHomeMissions(Long memberId) {
@@ -27,5 +27,10 @@ public class MissionQueryServiceImpl implements MissionQueryService {
         // Slice로 변환
         boolean hasNext = missions.size() > pageable.getPageSize();
         return new SliceImpl<>(missions, pageable, hasNext);
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return missionRepository.existsById(id);
     }
 }
