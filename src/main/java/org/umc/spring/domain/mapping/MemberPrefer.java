@@ -29,10 +29,11 @@ public class MemberPrefer extends BaseEntity {
         if(this.member != null)
             member.getMemberPrefers().remove(this);
         this.member = member;
-        member.getMemberPrefers().add(this); // 양방향 연관관계 편의 메서드
     }
 
     public void setFoodCategory(FoodCategory foodCategory){
+        if(this.foodCategory != null)
+            foodCategory.getMemberPrefers().remove(this);
         this.foodCategory = foodCategory;
     }
 }

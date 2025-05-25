@@ -21,7 +21,7 @@ public class Terms extends BaseEntity {
 
     @Builder.Default
     @OneToMany(mappedBy = "terms", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<MemberAgree> memberAgreeList = new HashSet<>();
+    private Set<MemberAgree> memberAgrees = new HashSet<>();
 
     @Column(nullable = false, length = 50)
     private String title;
@@ -32,6 +32,18 @@ public class Terms extends BaseEntity {
 
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean optional;
+
+    public void addMemberAgree(MemberAgree memberAgree) {
+        if (memberAgree == null || this.memberAgrees.contains(memberAgree)) return;
+        this.memberAgrees.add(memberAgree);
+        memberAgree.setTerms(this);
+    }
+
+    public void removeMemberAgree(MemberAgree memberAgree) {
+        if (memberAgree == null || !this.memberAgrees.contains(memberAgree)) return;
+        this.memberAgrees.remove(memberAgree);
+        memberAgree.setTerms(null);
+    }
 
     @PrePersist
     private void prePersist() {
