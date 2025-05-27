@@ -3,6 +3,7 @@ package org.umc.spring.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.umc.spring.domain.Review;
@@ -41,7 +42,7 @@ public class StoreQueryServiceImpl implements StoreQueryService{
     }
 
     @Override
-    public Page<Review> getReviewList(Long StoreId, Integer page) {
+    public Slice<Review> getReviewList(Long StoreId, Integer page) {
 
         Store store = storeRepository.findById(StoreId).get();
 
