@@ -47,6 +47,15 @@ public class StoreResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class ReviewPreViewSliceDTO {
+        List<ReviewPreViewDTO> reviewList;
+        Boolean hasNext;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class ReviewPreViewDTO {
         String ownerNickname;
         Float score;
