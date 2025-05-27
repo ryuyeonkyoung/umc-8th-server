@@ -1,6 +1,7 @@
 package org.umc.spring.converter;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 import org.umc.spring.domain.Review;
 import org.umc.spring.domain.Store;
 import org.umc.spring.dto.store.request.StoreRequestDTO;
@@ -40,6 +41,7 @@ public class StoreConverter {
                 .body(review.getContext())
                 .build();
     }
+
     public static StoreResponseDTO.ReviewPreViewListDTO reviewPreViewListDTO(Page<Review> reviewList){
 
         List<StoreResponseDTO.ReviewPreViewDTO> reviewPreViewDTOList = reviewList.stream()
@@ -52,6 +54,17 @@ public class StoreConverter {
                 .totalElements(reviewList.getTotalElements())
                 .listSize(reviewPreViewDTOList.size())
                 .reviewList(reviewPreViewDTOList)
+                .build();
+    }
+
+    public static StoreResponseDTO.ReviewPreViewSliceDTO reviewPreViewSliceListDTO(Slice<Review> reviewSlice){
+
+        List<StoreResponseDTO.ReviewPreViewDTO> reviewPreViewDTOList = reviewSlice.stream()
+                .map(StoreConverter::reviewPreViewDTO).collect(Collectors.toList());
+
+        return StoreResponseDTO.ReviewPreViewSliceDTO.builder()
+                .reviewList(reviewPreViewDTOList)
+                .hasNext(reviewSlice.hasNext())
                 .build();
     }
 }
