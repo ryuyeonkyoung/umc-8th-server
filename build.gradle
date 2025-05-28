@@ -32,6 +32,9 @@ dependencies {
 	// 2. Database driver
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
+	// P6Spy - SQL 쿼리 로깅 라이브러리
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+
 	// 3. QueryDSL (jakarta)
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 	annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
@@ -72,3 +75,4 @@ dependencyManagement {
 		mavenBom "com.fasterxml.jackson:jackson-bom:2.18.3"
 	}
 }
+
