@@ -3,6 +3,7 @@ package org.umc.spring.dto.member.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 import org.umc.spring.domain.enums.Role;
@@ -44,5 +45,16 @@ public class MemberRequestDTO {
         private List<Long> preferCategory = new ArrayList<>();
         @NotNull
         private Role role;
+    }
+
+    @Getter
+    @Setter
+    public static class LoginRequestDTO{
+        @NotBlank(message = "이메일은 필수입니다.")
+        @Email(message = "올바른 이메일 형식이어야 합니다.")
+        private String email;
+
+        @NotBlank(message = "패스워드는 필수입니다.")
+        private String password;
     }
 }
