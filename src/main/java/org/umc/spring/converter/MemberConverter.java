@@ -1,5 +1,6 @@
 package org.umc.spring.converter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.umc.spring.domain.Member;
 import org.umc.spring.domain.enums.Gender;
 import org.umc.spring.domain.enums.MemberStatus;
@@ -10,6 +11,7 @@ import org.umc.spring.dto.member.response.MemberResponseDTO;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 
+@Slf4j
 public class MemberConverter {
 
     public static MemberResponseDTO.JoinResultDTO toJoinResultDTO(Member member) {
@@ -20,6 +22,8 @@ public class MemberConverter {
     }
 
     public static Member toMember(MemberRequestDTO.JoinDto request) {
+
+        log.info("request: {}", request.toString());
 
         SocialType socialType = switch (request.getSocialType()) {
             case 1 -> SocialType.KAKAO;
@@ -47,12 +51,15 @@ public class MemberConverter {
                 .nickname(request.getNickname())
                 .socialId(request.getSocialId())
                 .socialType(socialType)
+//                .socialType(SocialType.KAKAO)
                 .phoneNumber(request.getPhoneNumber())
                 .phoneVerified(false)
                 .address(request.getAddress())
                 .gender(gender)
                 .email(request.getEmail())
-                .point(request.getPoint())
+                .password(request.getPassword())
+                .role(request.getRole())
+                .point(0) // 기본 포인트 0으로 설정
                 .status(status)
                 .memberPrefers(new HashSet<>()) // HashSet로 초기화
                 .build();

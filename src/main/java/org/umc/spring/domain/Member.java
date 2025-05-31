@@ -5,6 +5,7 @@ import lombok.*;
 import org.umc.spring.domain.common.BaseEntity;
 import org.umc.spring.domain.enums.Gender;
 import org.umc.spring.domain.enums.MemberStatus;
+import org.umc.spring.domain.enums.Role;
 import org.umc.spring.domain.enums.SocialType;
 import org.umc.spring.domain.mapping.MemberAgree;
 import org.umc.spring.domain.mapping.MemberMission;
@@ -72,18 +73,29 @@ public class Member extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String address;
 
-//    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 50)
     private String email;
+
+    @Column(nullable = false, length = 100)
+    private String password;
 
     @Builder.Default
     @Column(nullable = false, length = 20)
     private Integer point = 0;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'USER'")
+    private Role role;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'ACTIVE'")
     private MemberStatus status;
 
     private LocalDate inactiveDate;
+
+    public void encodePassword(String password) {
+        this.password = password;
+    }
 
     public void addMemberPrefer(MemberPrefer memberPrefer) {
         if (memberPrefer == null || memberPrefers.contains(memberPrefer)) return;
