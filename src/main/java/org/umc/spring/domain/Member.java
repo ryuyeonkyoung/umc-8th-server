@@ -141,6 +141,12 @@ public class Member extends BaseEntity {
         memberMission.setMember(null);
     }
 
+    /**
+     * 회원과 연관된 리뷰를 제거합니다.
+     *
+     * 리뷰가 null이 아니고 현재 회원의 리뷰 목록에 포함되어 있을 때만 제거하며,
+     * 해당 리뷰의 회원 참조도 null로 설정합니다.
+     */
     public void removeReview(Review review) {
         if (review == null || !this.reviews.contains(review)) return;
         this.reviews.remove(review);

@@ -41,6 +41,11 @@ public class Terms extends BaseEntity {
         memberAgree.setTerms(this);
     }
 
+    /**
+     * `memberAgrees` 집합에서 지정된 `MemberAgree`를 제거하고, 해당 `MemberAgree`의 `terms` 참조를 null로 설정합니다.
+     *
+     * @param memberAgree 제거할 `MemberAgree` 객체. null이거나 집합에 없는 경우 아무 작업도 수행하지 않습니다.
+     */
     public void removeMemberAgree(MemberAgree memberAgree) {
         if (memberAgree == null || !this.memberAgrees.contains(memberAgree)) return;
         this.memberAgrees.remove(memberAgree);

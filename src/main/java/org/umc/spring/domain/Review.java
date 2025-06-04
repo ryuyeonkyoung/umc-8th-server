@@ -87,6 +87,11 @@ public class Review extends BaseEntity {
         this.store = store;
     }
 
+    /**
+     * 리뷰의 소유 회원을 변경하며, 기존 회원의 리뷰 목록에서 이 리뷰를 제거합니다.
+     *
+     * @param member 새로 지정할 회원 객체
+     */
     public void setMember(Member member) {
         if (this.member != null) {
             this.member.getReviews().remove(this);

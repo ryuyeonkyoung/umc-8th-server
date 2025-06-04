@@ -72,6 +72,13 @@ public class Store extends BaseEntity {
         review.setStore(null);
     }
 
+    /**
+     * 매장의 지역 정보를 변경합니다.
+     *
+     * 이전에 설정된 지역이 있다면 해당 지역의 매장 목록에서 이 매장을 제거한 후, 새로운 지역으로 변경합니다.
+     *
+     * @param region 새로 지정할 지역
+     */
     public void setRegion(Region region) {
         if (this.region != null) {
             this.region.getStores().remove(this);
@@ -79,6 +86,11 @@ public class Store extends BaseEntity {
         this.region = region;
     }
 
+    /**
+     * 이 매장의 주요 정보를 문자열로 반환합니다.
+     *
+     * @return 매장의 id, 이름, 주소, 평점, 지역명을 포함한 문자열
+     */
     @Override
     public String toString() {
         return "Store{" +
