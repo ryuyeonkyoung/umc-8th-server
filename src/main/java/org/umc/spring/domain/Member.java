@@ -2,6 +2,8 @@ package org.umc.spring.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.umc.spring.domain.common.BaseEntity;
 import org.umc.spring.domain.enums.Gender;
 import org.umc.spring.domain.enums.MemberStatus;
@@ -20,6 +22,8 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@DynamicInsert
+@DynamicUpdate
 public class Member extends BaseEntity {
 
     @Id
@@ -27,7 +31,6 @@ public class Member extends BaseEntity {
     private Long id;
 
     @Version
-    @Builder.Default
     @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
     private Long version = 0L;
 
@@ -79,7 +82,6 @@ public class Member extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String password;
 
-    @Builder.Default
     @Column(nullable = false, length = 20)
     private Integer point = 0;
 
@@ -145,14 +147,4 @@ public class Member extends BaseEntity {
         review.setMember(null);
     }
 
-
-    @PrePersist
-    private void prePersist() {
-        if (this.point == null) {
-            this.point = 0;
-        }
-        if (this.status == null) {
-            this.status = MemberStatus.ACTIVE;
-        }
-    }
 }

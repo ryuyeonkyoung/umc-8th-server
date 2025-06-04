@@ -2,6 +2,8 @@ package org.umc.spring.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.umc.spring.domain.common.BaseEntity;
 
 import java.time.DayOfWeek;
@@ -14,6 +16,8 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@DynamicInsert
+@DynamicUpdate
 public class Store extends BaseEntity {
 
     @Id
@@ -21,7 +25,6 @@ public class Store extends BaseEntity {
     private Long id;
 
     @Version
-    @Builder.Default
     @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
     private Long version = 0L;
 
@@ -74,16 +77,6 @@ public class Store extends BaseEntity {
             this.region.getStores().remove(this);
         }
         this.region = region;
-    }
-
-    @PrePersist
-    private void prePersist() {
-        if (this.openTime == null) {
-            this.openTime = LocalTime.of(8, 0);
-        }
-        if (this.closeTime == null) {
-            this.closeTime = LocalTime.of(23, 59);
-        }
     }
 
     @Override

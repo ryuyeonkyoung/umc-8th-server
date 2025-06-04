@@ -2,6 +2,8 @@ package org.umc.spring.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.umc.spring.domain.common.BaseEntity;
 import org.umc.spring.domain.mapping.MemberMission;
 
@@ -14,6 +16,8 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@DynamicInsert
+@DynamicUpdate
 public class Mission extends BaseEntity {
 
     @Id

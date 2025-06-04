@@ -2,6 +2,7 @@ package org.umc.spring.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
 import org.umc.spring.domain.common.BaseEntity;
 import org.umc.spring.domain.mapping.MemberAgree;
 
@@ -13,6 +14,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@DynamicInsert
 public class Terms extends BaseEntity {
 
     @Id
@@ -43,12 +45,5 @@ public class Terms extends BaseEntity {
         if (memberAgree == null || !this.memberAgrees.contains(memberAgree)) return;
         this.memberAgrees.remove(memberAgree);
         memberAgree.setTerms(null);
-    }
-
-    @PrePersist
-    private void prePersist() {
-        if (this.optional == null) {
-            this.optional = false;
-        }
     }
 }
