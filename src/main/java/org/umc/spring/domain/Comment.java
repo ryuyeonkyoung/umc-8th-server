@@ -2,6 +2,7 @@ package org.umc.spring.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
 import org.umc.spring.domain.common.BaseEntity;
 import org.umc.spring.domain.enums.CommentStatus;
 
@@ -10,6 +11,7 @@ import org.umc.spring.domain.enums.CommentStatus;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@DynamicInsert
 public class Comment extends BaseEntity {
 
     @Id
@@ -33,12 +35,5 @@ public class Comment extends BaseEntity {
             this.review.getComments().remove(this);
         }
         this.review = review;
-    }
-
-    @PrePersist
-    private void prePersist() {
-        if (this.status == null) {
-            this.status = CommentStatus.ACTIVE;
-        }
     }
 }

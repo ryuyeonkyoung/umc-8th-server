@@ -2,6 +2,8 @@ package org.umc.spring.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.umc.spring.domain.common.BaseEntity;
 import org.umc.spring.domain.enums.ReviewStatus;
 
@@ -15,6 +17,8 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@DynamicInsert
+@DynamicUpdate
 public class Review extends BaseEntity {
 
     @Id
@@ -49,7 +53,6 @@ public class Review extends BaseEntity {
     private ReviewStatus status;
 
     @Version
-    @Builder.Default
     @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
     private Long version = 0L;
 
@@ -89,12 +92,5 @@ public class Review extends BaseEntity {
             this.member.getReviews().remove(this);
         }
         this.member = member;
-    }
-
-    @PrePersist
-    private void prePersist() {
-        if (this.status == null) {
-            this.status = ReviewStatus.ACTIVE;
-        }
     }
 }
