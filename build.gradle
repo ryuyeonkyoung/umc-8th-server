@@ -6,7 +6,12 @@ plugins {
 
 group = 'org.umc'
 version = '1.0.0'
-sourceCompatibility = '17'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
 
 configurations {
 	compileOnly {
@@ -89,4 +94,4 @@ tasks.withType(JavaCompile) {
 			'--add-opens',
 			'java.base/java.util=ALL-UNNAMED'
 	]
-}ss
+}
