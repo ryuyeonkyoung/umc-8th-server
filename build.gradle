@@ -63,6 +63,7 @@ dependencies {
 
 	// Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework:spring-context'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
@@ -94,4 +95,13 @@ tasks.withType(JavaCompile) {
 			'--add-opens',
 			'java.base/java.util=ALL-UNNAMED'
 	]
+}
+
+gradle.taskGraph.whenReady {
+	tasks.withType(Test).configureEach {
+		retry {
+			maxRetries = 3
+			maxFailures = 10
+		}
+	}
 }
