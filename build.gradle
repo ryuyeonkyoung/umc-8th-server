@@ -1,11 +1,11 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.4.4'
-	id 'io.spring.dependency-management' version '1.1.7'
+	id 'org.springframework.boot' version '3.0.0'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
 group = 'org.umc'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 
 java {
 	toolchain {
@@ -66,26 +66,32 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-// QueryDSL Q타입 생성 디렉토리
-def generated = layout.buildDirectory.dir("generated/querydsl")
-
-// sourceSet 설정
-sourceSets {
-	main.java.srcDir generated.get().asFile
-}
-
-// annotation processor 설정
-tasks.withType(JavaCompile).configureEach {
-	options.generatedSourceOutputDirectory = generated.get().asFile
-}
-
 tasks.named('test') {
 	useJUnitPlatform()
 }
 
-dependencyManagement {
-	imports {
-		mavenBom "com.fasterxml.jackson:jackson-bom:2.18.3"
-	}
+def querydslDir = "src/main/generated"
+
+sourceSets {
+	main.java.srcDirs += [ querydslDir ]
 }
 
+tasks.withType(JavaCompile) {
+	options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+}
+
+clean.doLast {
+	file(querydslDir).deleteDir()
+}
+
+clean {
+	delete fileTree(dir: 'src/main/generated', include: '**/*.java')
+}
+tasks.withType(JavaCompile) {
+	options.compilerArgs += [
+			'--add-opens',
+			'java.base/java.lang=ALL-UNNAMED',
+			'--add-opens',
+			'java.base/java.util=ALL-UNNAMED'
+	]
+}
