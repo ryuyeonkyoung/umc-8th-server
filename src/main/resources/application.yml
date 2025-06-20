@@ -6,7 +6,7 @@ spring:
     active: dev
 
   datasource:
-    url: jdbc:p6spy:mysql://localhost:3306/umc
+    url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: com.p6spy.engine.spy.P6SpyDriver
@@ -43,13 +43,13 @@ jwt:
 cloud:
   aws:
     s3:
-      bucket: umc-8th-dev
+      bucket: umc-8th-s3
       path:
-        review : review
+        review : reviews
     region:
       static: ap-northeast-2
     stack:
       auto:false
     credentials:
-      accessKey: ${{ secrets.AWS_ACTION_ACCESS_KEY_ID }}
-      secretKey: ${{ secrets.AWS_ACTION_SECRET_ACCESS_KEY }}
+      accessKey: ${AWS_ACCESS_KEY}
+      secretKey: ${AWS_SECRET_KEY}
