@@ -8,7 +8,11 @@ import org.umc.spring.dto.member.response.MemberResponseDTO;
 import org.umc.spring.dto.mission.response.CursorPagedMissionResponseDTO;
 
 public interface MemberQueryService {
-    MemberProfileResponseDTO loadMemberProfile(Long memberId);
-    Slice<CursorPagedMissionResponseDTO> loadCompletedMissions(Long memberId, Long lastMissionId, MissionStatus missionStatus);
-    MemberResponseDTO.MemberInfoDTO getMemberInfo(HttpServletRequest request);
+
+  MemberProfileResponseDTO loadMemberProfile(Long memberId);
+
+  Slice<CursorPagedMissionResponseDTO> loadCompletedMissions(Long memberId, Long lastMissionId,
+      MissionStatus missionStatus);
+
+  MemberResponseDTO.MemberInfoDTO getMemberInfo(HttpServletRequest request);
 }

@@ -1,10 +1,10 @@
 package org.umc.spring.repository.StoreRepository;
 
-import org.umc.spring.domain.Store;
-
 import java.util.List;
+import org.umc.spring.domain.Store;
 
 
 public interface StoreRepositoryCustom {
-    List<Store> dynamicQueryWithBooleanBuilder(String name, Float score);
+
+  List<Store> dynamicQueryWithBooleanBuilder(String name, Float score);
 }

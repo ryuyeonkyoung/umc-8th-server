@@ -12,23 +12,23 @@ import org.umc.spring.validation.annotation.ExistMission;
 @RequiredArgsConstructor
 public class MissionExistValidator implements ConstraintValidator<ExistMission, Long> {
 
-    private final MissionQueryService missionQueryService;
+  private final MissionQueryService missionQueryService;
 
-    @Override
-    public void initialize(ExistMission constraintAnnotation) {
-        ConstraintValidator.super.initialize(constraintAnnotation);
+  @Override
+  public void initialize(ExistMission constraintAnnotation) {
+    ConstraintValidator.super.initialize(constraintAnnotation);
+  }
+
+  @Override
+  public boolean isValid(Long missionId, ConstraintValidatorContext context) {
+    boolean isValid = missionQueryService.existsById(missionId);
+
+    if (!isValid) {
+      context.disableDefaultConstraintViolation();
+      context.buildConstraintViolationWithTemplate(ErrorStatus.MISSION_NOT_FOUND.toString())
+          .addConstraintViolation();
     }
 
-    @Override
-    public boolean isValid(Long missionId, ConstraintValidatorContext context) {
-        boolean isValid = missionQueryService.existsById(missionId);
-
-        if (!isValid) {
-            context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(ErrorStatus.MISSION_NOT_FOUND.toString())
-                    .addConstraintViolation();
-        }
-
-        return isValid;
-    }
+    return isValid;
+  }
 }

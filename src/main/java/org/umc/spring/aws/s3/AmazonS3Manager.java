@@ -10,11 +10,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.umc.spring.config.AmazonConfig;
 import org.umc.spring.domain.Uuid;
+import org.umc.spring.repository.UuidRepository;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AmazonS3Manager{
+public class AmazonS3Manager {
 
   private final AmazonS3 amazonS3;
 
@@ -22,13 +23,15 @@ public class AmazonS3Manager{
 
   private final UuidRepository uuidRepository;
 
-  public String uploadFile(String keyName, MultipartFile file){
+  public String uploadFile(String keyName, MultipartFile file) {
     ObjectMetadata metadata = new ObjectMetadata();
     metadata.setContentLength(file.getSize());
     try {
-      amazonS3.putObject(new PutObjectRequest(amazonConfig.getBucket(), keyName, file.getInputStream(), metadata));
-    } catch (IOException e){
-      log.error("error at AmazonS3Manager uploadFile : {}", (Object) e.getStackTrace());
+      amazonS3.putObject(
+          new PutObjectRequest(amazonConfig.getBucket(), keyName, file.getInputStream(), metadata));
+    } catch (IOException e) {
+      log.error("Error uploading file to S3: {}", e.getMessage(), e);
+      throw new RuntimeException("Failed to upload file to S3", e);
     }
 
     return amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();

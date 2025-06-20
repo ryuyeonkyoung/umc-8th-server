@@ -22,27 +22,28 @@ import org.umc.spring.repository.MemberRepository.MemberRepository;
 @Transactional(readOnly = true)
 public class MemberQueryServiceImpl implements MemberQueryService {
 
-    private final MemberRepository memberRepository;
-    private final JwtTokenProvider jwtTokenProvider;
+  private final MemberRepository memberRepository;
+  private final JwtTokenProvider jwtTokenProvider;
 
-    @Override
-    public MemberProfileResponseDTO loadMemberProfile(Long memberId) {
-        return memberRepository.findMemberProfileById(memberId);
-    }
+  @Override
+  public MemberProfileResponseDTO loadMemberProfile(Long memberId) {
+    return memberRepository.findMemberProfileById(memberId);
+  }
 
-    @Override
-    public Slice<CursorPagedMissionResponseDTO> loadCompletedMissions(Long memberId, Long lastMissionId, MissionStatus missionStatus) {
-        return memberRepository.findCompletedMissionsByCursor(memberId, lastMissionId, missionStatus);
-    }
+  @Override
+  public Slice<CursorPagedMissionResponseDTO> loadCompletedMissions(Long memberId,
+      Long lastMissionId, MissionStatus missionStatus) {
+    return memberRepository.findCompletedMissionsByCursor(memberId, lastMissionId, missionStatus);
+  }
 
-    @Override
-    @Transactional(readOnly = true)
-    public MemberResponseDTO.MemberInfoDTO getMemberInfo(HttpServletRequest request){
-        Authentication authentication = jwtTokenProvider.extractAuthentication(request);
-        String email = authentication.getName();
+  @Override
+  @Transactional(readOnly = true)
+  public MemberResponseDTO.MemberInfoDTO getMemberInfo(HttpServletRequest request) {
+    Authentication authentication = jwtTokenProvider.extractAuthentication(request);
+    String email = authentication.getName();
 
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(()-> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
-        return MemberConverter.toMemberInfoDTO(member);
-    }
+    Member member = memberRepository.findByEmail(email)
+        .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
+    return MemberConverter.toMemberInfoDTO(member);
+  }
 }
