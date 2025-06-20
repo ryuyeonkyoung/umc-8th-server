@@ -55,7 +55,7 @@ dependencies {
 	annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
 
 	// OpenAPI / Swagger
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.0'
 
 	// Lombok
 	compileOnly 'org.projectlombok:lombok'
@@ -94,4 +94,8 @@ tasks.withType(JavaCompile) {
 			'--add-opens',
 			'java.base/java.util=ALL-UNNAMED'
 	]
+}
+
+jar {
+	enabled = false
 }
