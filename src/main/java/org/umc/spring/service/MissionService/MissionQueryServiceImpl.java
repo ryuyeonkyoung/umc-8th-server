@@ -1,5 +1,6 @@
 package org.umc.spring.service.MissionService;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,51 +20,50 @@ import org.umc.spring.repository.MemberMissionRepository.MemberMissionRepository
 import org.umc.spring.repository.MissionRepository.MissionRepository;
 import org.umc.spring.service.StoreService.StoreQueryService;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MissionQueryServiceImpl implements MissionQueryService {
 
-    private final MissionRepository missionRepository;
-    private final StoreQueryService storeQueryService;
-    private final MemberMissionRepository memberMissionRepository;
+  private final MissionRepository missionRepository;
+  private final StoreQueryService storeQueryService;
+  private final MemberMissionRepository memberMissionRepository;
 
-    @Override
-    public Slice<MissionResponseDTO> loadHomeMissions(Long memberId) {
-        Pageable pageable = PageRequest.of(0, 10);
-        List<MissionResponseDTO> missions = missionRepository.findAvailableMissionsByRegion(memberId, pageable);
+  @Override
+  public Slice<MissionResponseDTO> loadHomeMissions(Long memberId) {
+    Pageable pageable = PageRequest.of(0, 10);
+    List<MissionResponseDTO> missions = missionRepository.findAvailableMissionsByRegion(memberId,
+        pageable);
 
-        // Slice로 변환
-        boolean hasNext = missions.size() > pageable.getPageSize();
-        return new SliceImpl<>(missions, pageable, hasNext);
-    }
+    // Slice로 변환
+    boolean hasNext = missions.size() > pageable.getPageSize();
+    return new SliceImpl<>(missions, pageable, hasNext);
+  }
 
-    @Override
-    public boolean existsById(Long id) {
-        return missionRepository.existsById(id);
-    }
+  @Override
+  public boolean existsById(Long id) {
+    return missionRepository.existsById(id);
+  }
 
-    @Override
-    public Page<Mission> getStoreAllMissions(Long storeId, Integer page) {
-        // 가게 존재 여부 확인
-        Store store = storeQueryService.findStore(storeId)
-                .orElseThrow(() -> new StoreHandler(ErrorStatus.STORE_NOT_FOUND));
+  @Override
+  public Page<Mission> getStoreAllMissions(Long storeId, Integer page) {
+    // 가게 존재 여부 확인
+    Store store = storeQueryService.findStore(storeId)
+        .orElseThrow(() -> new StoreHandler(ErrorStatus.STORE_NOT_FOUND));
 
-        // 페이징 처리 (10개씩)
-        PageRequest pageRequest = PageRequest.of(page, 10);
+    // 페이징 처리 (10개씩)
+    PageRequest pageRequest = PageRequest.of(page, 10);
 
-        // 가게별 미션 목록 조회
-        return missionRepository.findAllByStore(store, pageRequest);
-    }
+    // 가게별 미션 목록 조회
+    return missionRepository.findAllByStore(store, pageRequest);
+  }
 
-    @Override
-    public Page<MemberMission> getMyMissions(Long memberId, MissionStatus status, Integer page) {
-        // 페이징 처리 (10개씩)
-        PageRequest pageRequest = PageRequest.of(page, 10);
+  @Override
+  public Page<MemberMission> getMyMissions(Long memberId, MissionStatus status, Integer page) {
+    // 페이징 처리 (10개씩)
+    PageRequest pageRequest = PageRequest.of(page, 10);
 
-        // 회원별, 상태별 미션 목록 조회
-        return memberMissionRepository.findAllByMemberIdAndStatus(memberId, status, pageRequest);
-    }
+    // 회원별, 상태별 미션 목록 조회
+    return memberMissionRepository.findAllByMemberIdAndStatus(memberId, status, pageRequest);
+  }
 }

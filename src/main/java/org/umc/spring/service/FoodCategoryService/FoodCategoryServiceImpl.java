@@ -9,11 +9,11 @@ import org.umc.spring.repository.FoodCategoryRepository.FoodCategoryRepository;
 @RequiredArgsConstructor
 public class FoodCategoryServiceImpl implements FoodCategoryService {
 
-    private final FoodCategoryRepository foodCategoryRepository;
+  private final FoodCategoryRepository foodCategoryRepository;
 
-    @Override
-    @Transactional
-    public boolean existsById(Long id){
-        return foodCategoryRepository.existsById(id);
-    }
+  @Override
+  @Transactional
+  public boolean existsById(Long id) {
+    return foodCategoryRepository.existsById(id);
+  }
 }

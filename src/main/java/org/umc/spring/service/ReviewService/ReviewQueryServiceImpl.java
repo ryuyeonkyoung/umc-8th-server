@@ -13,11 +13,11 @@ import org.umc.spring.repository.ReviewRepository.ReviewRepository;
 @Transactional(readOnly = true)
 public class ReviewQueryServiceImpl implements ReviewQueryService {
 
-    private final ReviewRepository reviewRepository;
+  private final ReviewRepository reviewRepository;
 
-    @Override
-    public Slice<Review> getMyReviews(Long memberId, Integer page) {
-        return reviewRepository.findSliceAllByMemberId(memberId, PageRequest.of(page, 10));
-    }
+  @Override
+  public Slice<Review> getMyReviews(Long memberId, Integer page) {
+    return reviewRepository.findSliceAllByMemberId(memberId, PageRequest.of(page, 10));
+  }
 }
 

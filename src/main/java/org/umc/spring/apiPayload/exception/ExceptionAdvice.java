@@ -2,6 +2,10 @@ package org.umc.spring.apiPayload.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,130 +25,135 @@ import org.umc.spring.apiPayload.code.ErrorReasonDTO;
 import org.umc.spring.apiPayload.code.status.ErrorStatus;
 import org.umc.spring.service.ErrorService.ErrorWebhookService;
 
-import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
-
 @Slf4j
 @RestControllerAdvice(annotations = {RestController.class})
 @RequiredArgsConstructor
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
-    @Value("${DISCORD_WEBHOOK_URL}")
-    private String discordWebhookUrl;
+  private final ErrorWebhookService webhookService;
+  @Value("${DISCORD_WEBHOOK_URL}")
+  private String discordWebhookUrl;
+  @Value("${SLACK_WEBHOOK_URL}")
+  private String slackWebhookUrl;
+  @Value("${spring.profiles.active:default}")
+  private String activeProfile;
 
-    @Value("${SLACK_WEBHOOK_URL}")
-    private String slackWebhookUrl;
+  // 1) ConstraintViolationException 전용 처리
+  @ExceptionHandler // Controller 내에서 특정 예외를 잡아 처리
+  public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
+    String errorMessage = e.getConstraintViolations().stream()
+        .map(constraintViolation -> constraintViolation.getMessage())
+        .findFirst()
+        .orElseThrow(() -> new RuntimeException("ConstraintViolationException 추출 도중 에러 발생"));
 
-    @Value("${spring.profiles.active:default}")
-    private String activeProfile;
+    return handleExceptionInternalConstraint(e, ErrorStatus.valueOf(errorMessage),
+        HttpHeaders.EMPTY, request);
+  }
 
-    private final ErrorWebhookService webhookService;
+  // 2) MethodArgumentNotValidException 전용 처리
+  @Override
+  public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
+      HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
-    // 1) ConstraintViolationException 전용 처리
-    @ExceptionHandler // Controller 내에서 특정 예외를 잡아 처리
-    public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
-        String errorMessage = e.getConstraintViolations().stream()
-                .map(constraintViolation -> constraintViolation.getMessage())
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("ConstraintViolationException 추출 도중 에러 발생"));
+    Map<String, String> errors = new LinkedHashMap<>();
 
-        return handleExceptionInternalConstraint(e, ErrorStatus.valueOf(errorMessage), HttpHeaders.EMPTY,request);
-    }
+    e.getBindingResult().getFieldErrors().stream()
+        .forEach(fieldError -> {
+          String fieldName = fieldError.getField();
+          String errorMessage = Optional.ofNullable(fieldError.getDefaultMessage()).orElse("");
+          errors.merge(fieldName, errorMessage,
+              (existingErrorMessage, newErrorMessage) -> existingErrorMessage + ", "
+                  + newErrorMessage);
+        });
 
-    // 2) MethodArgumentNotValidException 전용 처리
-    @Override
-    public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+    return handleExceptionInternalArgs(e, HttpHeaders.EMPTY, ErrorStatus.valueOf("_BAD_REQUEST"),
+        request, errors);
+  }
 
-        Map<String, String> errors = new LinkedHashMap<>();
+  // 3) GeneralException (Custom Exception) 전용 처리
+  @ExceptionHandler(value = GeneralException.class)
+  public ResponseEntity onThrowException(GeneralException generalException,
+      HttpServletRequest request) {
+    ErrorReasonDTO errorReasonHttpStatus = generalException.getErrorReasonHttpStatus();
+    return handleExceptionInternal(generalException, errorReasonHttpStatus, null, request);
+  }
 
-        e.getBindingResult().getFieldErrors().stream()
-                .forEach(fieldError -> {
-                    String fieldName = fieldError.getField();
-                    String errorMessage = Optional.ofNullable(fieldError.getDefaultMessage()).orElse("");
-                    errors.merge(fieldName, errorMessage, (existingErrorMessage, newErrorMessage) -> existingErrorMessage + ", " + newErrorMessage);
-                });
+  private ResponseEntity<Object> handleExceptionInternal(Exception e, ErrorReasonDTO reason,
+      HttpHeaders headers, HttpServletRequest request) {
 
-        return handleExceptionInternalArgs(e,HttpHeaders.EMPTY,ErrorStatus.valueOf("_BAD_REQUEST"),request,errors);
-    }
-
-    // 3) GeneralException (Custom Exception) 전용 처리
-    @ExceptionHandler(value = GeneralException.class)
-    public ResponseEntity onThrowException(GeneralException generalException, HttpServletRequest request) {
-        ErrorReasonDTO errorReasonHttpStatus = generalException.getErrorReasonHttpStatus();
-        return handleExceptionInternal(generalException,errorReasonHttpStatus,null,request);
-    }
-
-    private ResponseEntity<Object> handleExceptionInternal(Exception e, ErrorReasonDTO reason,
-                                                           HttpHeaders headers, HttpServletRequest request) {
-
-        ApiResponse<Object> body = ApiResponse.onFailure(reason.getCode(),reason.getMessage(),null);
+    ApiResponse<Object> body = ApiResponse.onFailure(reason.getCode(), reason.getMessage(), null);
 //        e.printStackTrace();
 
-        WebRequest webRequest = new ServletWebRequest(request);
-        return super.handleExceptionInternal(
-                e,
-                body,
-                headers,
-                reason.getHttpStatus(),
-                webRequest
-        );
+    WebRequest webRequest = new ServletWebRequest(request);
+    return super.handleExceptionInternal(
+        e,
+        body,
+        headers,
+        reason.getHttpStatus(),
+        webRequest
+    );
+  }
+
+  // 4) 그 외 모든 Exception 처리 (최후의 보루)
+  @ExceptionHandler
+  public ResponseEntity<Object> exception(Exception e, WebRequest request) {
+    e.printStackTrace();
+
+    Map<String, Object> errorDetails = new LinkedHashMap<>();
+    errorDetails.put("timestamp", LocalDateTime.now());
+    errorDetails.put("message", e.getMessage());
+    errorDetails.put("path", ((ServletWebRequest) request).getRequest().getRequestURI());
+
+    if (activeProfile.equals("dev") || activeProfile.equals("prod")) {
+      errorDetails.put("profile", activeProfile);
+      webhookService.sendToDiscord(discordWebhookUrl, errorDetails);
+    } else {
+      errorDetails.put("profile", "local");
     }
 
-    // 4) 그 외 모든 Exception 처리 (최후의 보루)
-    @ExceptionHandler
-    public ResponseEntity<Object> exception(Exception e, WebRequest request) {
-        e.printStackTrace();
+    return handleExceptionInternalFalse(e, ErrorStatus._INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY,
+        ErrorStatus._INTERNAL_SERVER_ERROR.getHttpStatus(), request, e.getMessage());
+  }
 
-        Map<String, Object> errorDetails = new LinkedHashMap<>();
-        errorDetails.put("timestamp", LocalDateTime.now());
-        errorDetails.put("message", e.getMessage());
-        errorDetails.put("path", ((ServletWebRequest) request).getRequest().getRequestURI());
+  private ResponseEntity<Object> handleExceptionInternalFalse(Exception e,
+      ErrorStatus errorCommonStatus,
+      HttpHeaders headers, HttpStatus status, WebRequest request, String errorPoint) {
+    ApiResponse<Object> body = ApiResponse.onFailure(errorCommonStatus.getCode(),
+        errorCommonStatus.getMessage(), errorPoint);
+    return super.handleExceptionInternal(
+        e,
+        body,
+        headers,
+        status,
+        request
+    );
+  }
 
-        if (activeProfile.equals("dev") || activeProfile.equals("prod")) {
-            errorDetails.put("profile", activeProfile);
-            webhookService.sendToDiscord(discordWebhookUrl, errorDetails);
-        } else {
-            errorDetails.put("profile", "local");
-        }
+  private ResponseEntity<Object> handleExceptionInternalArgs(Exception e, HttpHeaders headers,
+      ErrorStatus errorCommonStatus,
+      WebRequest request, Map<String, String> errorArgs) {
+    ApiResponse<Object> body = ApiResponse.onFailure(errorCommonStatus.getCode(),
+        errorCommonStatus.getMessage(), errorArgs);
+    return super.handleExceptionInternal(
+        e,
+        body,
+        headers,
+        errorCommonStatus.getHttpStatus(),
+        request
+    );
+  }
 
-        return handleExceptionInternalFalse(e, ErrorStatus._INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY, ErrorStatus._INTERNAL_SERVER_ERROR.getHttpStatus(), request, e.getMessage());
-    }
-
-    private ResponseEntity<Object> handleExceptionInternalFalse(Exception e, ErrorStatus errorCommonStatus,
-                                                                HttpHeaders headers, HttpStatus status, WebRequest request, String errorPoint) {
-        ApiResponse<Object> body = ApiResponse.onFailure(errorCommonStatus.getCode(),errorCommonStatus.getMessage(),errorPoint);
-        return super.handleExceptionInternal(
-                e,
-                body,
-                headers,
-                status,
-                request
-        );
-    }
-
-    private ResponseEntity<Object> handleExceptionInternalArgs(Exception e, HttpHeaders headers, ErrorStatus errorCommonStatus,
-                                                               WebRequest request, Map<String, String> errorArgs) {
-        ApiResponse<Object> body = ApiResponse.onFailure(errorCommonStatus.getCode(),errorCommonStatus.getMessage(),errorArgs);
-        return super.handleExceptionInternal(
-                e,
-                body,
-                headers,
-                errorCommonStatus.getHttpStatus(),
-                request
-        );
-    }
-
-    private ResponseEntity<Object> handleExceptionInternalConstraint(Exception e, ErrorStatus errorCommonStatus,
-                                                                     HttpHeaders headers, WebRequest request) {
-        ApiResponse<Object> body = ApiResponse.onFailure(errorCommonStatus.getCode(), errorCommonStatus.getMessage(), null);
-        return super.handleExceptionInternal(
-                e,
-                body,
-                headers,
-                errorCommonStatus.getHttpStatus(),
-                request
-        );
-    }
+  private ResponseEntity<Object> handleExceptionInternalConstraint(Exception e,
+      ErrorStatus errorCommonStatus,
+      HttpHeaders headers, WebRequest request) {
+    ApiResponse<Object> body = ApiResponse.onFailure(errorCommonStatus.getCode(),
+        errorCommonStatus.getMessage(), null);
+    return super.handleExceptionInternal(
+        e,
+        body,
+        headers,
+        errorCommonStatus.getHttpStatus(),
+        request
+    );
+  }
 }

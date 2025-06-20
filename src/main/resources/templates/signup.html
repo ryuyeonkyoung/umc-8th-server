@@ -1,123 +1,123 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>회원가입</title>
-    <style>
-        /* 기존 스타일 유지 */
-    </style>
+  <title>회원가입</title>
+  <style>
+    /* 기존 스타일 유지 */
+  </style>
 </head>
 <body>
 <h2>회원가입</h2>
-<form th:action="@{/members/signup}" th:object="${memberJoinDto}" method="post">
-    <div th:if="${error}" th:text="${error}" style="color: red;"></div>
+<form method="post" th:action="@{/members/signup}" th:object="${memberJoinDto}">
+  <div style="color: red;" th:if="${error}" th:text="${error}"></div>
 
-    <div>
-        <label for="name">이름:</label>
-        <input type="text" id="name" th:field="*{name}" required>
+  <div>
+    <label for="name">이름:</label>
+    <input id="name" required th:field="*{name}" type="text">
+  </div>
+  <div>
+    <label for="email">이메일:</label>
+    <input id="email" required th:field="*{email}" type="email">
+  </div>
+  <div>
+    <label for="password">비밀번호:</label>
+    <input id="password" required th:field="*{password}" type="password">
+  </div>
+  <div>
+    <label for="gender">성별:</label>
+    <select id="gender" th:field="*{gender}">
+      <option value="1">남성</option>
+      <option value="2">여성</option>
+      <option value="3">선택안함</option>
+    </select>
+  </div>
+  <!--    <div>-->
+  <!--        <label for="birthYear">생년월일:</label>-->
+  <!--        <input type="number" id="birthYear" th:field="*{birthYear}" required>-->
+  <!--    </div>-->
+  <!--    <div>-->
+  <!--        <label for="birthMonth">출생월:</label>-->
+  <!--        <input type="number" id="birthMonth" th:field="*{birthMonth}" min="1" max="12" required>-->
+  <!--    </div>-->
+  <!--    <div>-->
+  <!--        <label for="birthDay">출생일:</label>-->
+  <!--        <input type="number" id="birthDay" th:field="*{birthDay}" min="1" max="31" required>-->
+  <!--    </div>-->
+  <!--    <div>-->
+  <!--        <label for="birth">생년월일:</label>-->
+  <!--        <input type="date" id="birth" th:field="*{birth}" required>-->
+  <!--    </div>-->
+  <div>
+    <label for="address">주소:</label>
+    <input id="address" required th:field="*{address}" type="text">
+  </div>
+  <!--    <div>-->
+  <!--        <label for="specAddress">상세주소:</label>-->
+  <!--        <input type="text" id="specAddress" th:field="*{specAddress}" required>-->
+  <!--    </div>-->
+  <div>
+    <label>선호 카테고리:</label>
+    <div class="preferCategory">
+      <label><input name="preferCategory" type="checkbox" value="1"> 중식</label>
+      <label><input name="preferCategory" type="checkbox" value="2"> 양식</label>
+      <label><input name="preferCategory" type="checkbox" value="3"> 치킨</label>
+      <label><input name="preferCategory" type="checkbox" value="4"> 분식</label>
+      <label><input name="preferCategory" type="checkbox" value="5"> 고기/구이</label>
     </div>
-    <div>
-        <label for="email">이메일:</label>
-        <input type="email" id="email" th:field="*{email}" required>
-    </div>
-    <div>
-        <label for="password">비밀번호:</label>
-        <input type="password" id="password" th:field="*{password}" required>
-    </div>
-    <div>
-        <label for="gender">성별:</label>
-        <select id="gender" th:field="*{gender}">
-            <option value="1">남성</option>
-            <option value="2">여성</option>
-            <option value="3">선택안함</option>
-        </select>
-    </div>
-<!--    <div>-->
-<!--        <label for="birthYear">생년월일:</label>-->
-<!--        <input type="number" id="birthYear" th:field="*{birthYear}" required>-->
-<!--    </div>-->
-<!--    <div>-->
-<!--        <label for="birthMonth">출생월:</label>-->
-<!--        <input type="number" id="birthMonth" th:field="*{birthMonth}" min="1" max="12" required>-->
-<!--    </div>-->
-<!--    <div>-->
-<!--        <label for="birthDay">출생일:</label>-->
-<!--        <input type="number" id="birthDay" th:field="*{birthDay}" min="1" max="31" required>-->
-<!--    </div>-->
-<!--    <div>-->
-<!--        <label for="birth">생년월일:</label>-->
-<!--        <input type="date" id="birth" th:field="*{birth}" required>-->
-<!--    </div>-->
-    <div>
-        <label for="address">주소:</label>
-        <input type="text" id="address" th:field="*{address}" required>
-    </div>
-<!--    <div>-->
-<!--        <label for="specAddress">상세주소:</label>-->
-<!--        <input type="text" id="specAddress" th:field="*{specAddress}" required>-->
-<!--    </div>-->
-    <div>
-        <label>선호 카테고리:</label>
-        <div class="preferCategory">
-            <label><input type="checkbox" name="preferCategory" value="1"> 중식</label>
-            <label><input type="checkbox" name="preferCategory" value="2"> 양식</label>
-            <label><input type="checkbox" name="preferCategory" value="3"> 치킨</label>
-            <label><input type="checkbox" name="preferCategory" value="4"> 분식</label>
-            <label><input type="checkbox" name="preferCategory" value="5"> 고기/구이</label>
-        </div>
-    </div>
-    <div>
-        <label for="nickname">닉네임:</label>
-        <input type="text" id="nickname" th:field="*{nickname}" required>
-    </div>
+  </div>
+  <div>
+    <label for="nickname">닉네임:</label>
+    <input id="nickname" required th:field="*{nickname}" type="text">
+  </div>
 
-    <div>
-        <label for="socialId">소셜 ID:</label>
-        <input type="text" id="socialId" th:field="*{socialId}" required>
-    </div>
+  <div>
+    <label for="socialId">소셜 ID:</label>
+    <input id="socialId" required th:field="*{socialId}" type="text">
+  </div>
 
-    <div>
-        <label for="socialType">소셜 타입:</label>
-        <select id="socialType" th:field="*{socialType}">
-            <option value="1">카카오</option>
-            <option value="2">네이버</option>
-            <option value="3">구글</option>
-        </select>
-    </div>
+  <div>
+    <label for="socialType">소셜 타입:</label>
+    <select id="socialType" th:field="*{socialType}">
+      <option value="1">카카오</option>
+      <option value="2">네이버</option>
+      <option value="3">구글</option>
+    </select>
+  </div>
 
-    <div>
-        <label for="phoneNumber">전화번호:</label>
-        <input type="text" id="phoneNumber" th:field="*{phoneNumber}" required>
-    </div>
+  <div>
+    <label for="phoneNumber">전화번호:</label>
+    <input id="phoneNumber" required th:field="*{phoneNumber}" type="text">
+  </div>
 
-    <div>
-        <label for="phoneVerified">전화번호 인증:</label>
-        <select id="phoneVerified" th:field="*{phoneVerified}">
-            <option value="true">인증됨</option>
-            <option value="false">인증안됨</option>
-        </select>
-    </div>
+  <div>
+    <label for="phoneVerified">전화번호 인증:</label>
+    <select id="phoneVerified" th:field="*{phoneVerified}">
+      <option value="true">인증됨</option>
+      <option value="false">인증안됨</option>
+    </select>
+  </div>
 
-    <div>
-        <label for="point">포인트:</label>
-        <input type="number" id="point" th:field="*{point}" value="0" required>
-    </div>
+  <div>
+    <label for="point">포인트:</label>
+    <input id="point" required th:field="*{point}" type="number" value="0">
+  </div>
 
-    <div>
-        <label for="status">상태:</label>
-        <select id="status" th:field="*{status}">
-            <option value="1">활성</option>
-            <option value="2">비활성</option>
-            <option value="3">정지</option>
-        </select>
-    </div>
-    <div>
-        <label for="role">역할:</label>
-        <select id="role" th:field="*{role}">
-            <option value="USER">일반 사용자</option>
-            <option value="ADMIN">관리자</option>
-        </select>
-    </div>
-    <button type="submit">가입하기</button>
+  <div>
+    <label for="status">상태:</label>
+    <select id="status" th:field="*{status}">
+      <option value="1">활성</option>
+      <option value="2">비활성</option>
+      <option value="3">정지</option>
+    </select>
+  </div>
+  <div>
+    <label for="role">역할:</label>
+    <select id="role" th:field="*{role}">
+      <option value="USER">일반 사용자</option>
+      <option value="ADMIN">관리자</option>
+    </select>
+  </div>
+  <button type="submit">가입하기</button>
 </form>
 </body>
 </html>

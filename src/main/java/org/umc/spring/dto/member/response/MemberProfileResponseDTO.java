@@ -10,10 +10,11 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class MemberProfileResponseDTO {
-    private final Long id;
-    private final String nickname;
-    private final String email;
-    private final String phoneNumber;
-    private final Boolean phoneVerified;
-    private final Integer point;
+
+  private final Long id;
+  private final String nickname;
+  private final String email;
+  private final String phoneNumber;
+  private final Boolean phoneVerified;
+  private final Integer point;
 }

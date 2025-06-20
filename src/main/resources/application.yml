@@ -6,7 +6,7 @@ spring:
     active: dev
 
   datasource:
-    url: jdbc:p6spy:mysql://localhost:3306/umc
+    url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: com.p6spy.engine.spy.P6SpyDriver
@@ -25,8 +25,8 @@ spring:
   servlet:
     multipart:
       enabled: true
-      max-file-size: 200MB
-      max-request-size: 300MB
+      max-file-size: 10MB
+      max-request-size: 100MB
 
 logging:
   level:
@@ -39,3 +39,17 @@ jwt:
     secretKey: umceightfightingjwttokenauthentication
     expiration:
       access: 14400000 # 4시간
+
+cloud:
+  aws:
+    s3:
+      bucket: umc-8th-s3
+      path:
+        review: reviews
+    region:
+      static: ap-northeast-2
+    stack:
+      auto:false
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY}
+      secretKey: ${AWS_SECRET_KEY}
