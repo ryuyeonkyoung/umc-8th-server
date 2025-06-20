@@ -39,3 +39,17 @@ jwt:
     secretKey: umceightfightingjwttokenauthentication
     expiration:
       access: 14400000 # 4시간
+
+cloud:
+  aws:
+    s3:
+      bucket: umc-8th-dev
+      path:
+        review : review
+    region:
+      static: ap-northeast-2
+    stack:
+      auto:false
+    credentials:
+      accessKey: ${{ secrets.AWS_ACTION_ACCESS_KEY_ID }}
+      secretKey: ${{ secrets.AWS_ACTION_SECRET_ACCESS_KEY }}

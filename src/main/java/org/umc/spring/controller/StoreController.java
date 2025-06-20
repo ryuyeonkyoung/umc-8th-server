@@ -10,8 +10,17 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.umc.spring.apiPayload.ApiResponse;
 import org.umc.spring.apiPayload.code.status.ErrorStatus;
 import org.umc.spring.apiPayload.exception.handler.PageHandler;
@@ -36,17 +45,22 @@ import org.umc.spring.validation.annotation.ExistStore;
 @RequestMapping("/stores")
 public class StoreController {
 
-    private final ReviewCommandService reviewService;
+    private final ReviewCommandService reviewCommandService;
     private final StoreQueryService storeQueryService;
     private final MissionQueryService missionQueryService;
 
-    @PostMapping("/{storeId}/reviews")
+    @PostMapping(
+        value = "/{storeId}/reviews",
+        consumes = MediaType.MULTIPART_FORM_DATA_VALUE      // JSON + 파일 업로드
+    )
     public ApiResponse<ReviewResponseDTO.CreateResultDTO> addReview(
-            @PathVariable @ExistStore Long storeId,
-            @Valid @RequestBody ReviewRequestDTO.CreateDto request,
-            @RequestHeader("X-AUTH-ID") Long memberId
+        @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+        @RequestPart("request") @Valid ReviewRequestDTO.CreateDto request,   // 리뷰 본문(JSON)
+        @ExistStore @PathVariable Long storeId,                              // 대상 매장
+        @RequestHeader("X-AUTH-ID") Long memberId,                           // 작성 회원
+        @RequestPart(value = "image", required = false) MultipartFile reviewImage  // 첨부 이미지
     ) {
-        Review review = reviewService.addReview(storeId, memberId, request.getContent(), request.getRating());
+        Review review = reviewCommandService.createReview(memberId, storeId, request, reviewImage);
         return ApiResponse.onSuccess(ReviewConverter.toCreateResultDTO(review));
     }
 

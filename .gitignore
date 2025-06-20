@@ -52,3 +52,4 @@ out/
 /src/main/generated/org/umc/spring/domain/QReviewImage.java
 /src/main/generated/org/umc/spring/domain/QStore.java
 /src/main/generated/org/umc/spring/domain/QTerms.java
+/src/main/generated/org/umc/spring/domain/QUuid.java

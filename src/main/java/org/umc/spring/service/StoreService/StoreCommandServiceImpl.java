@@ -15,6 +15,7 @@ import org.umc.spring.repository.StoreRepository.StoreRepository;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class StoreCommandServiceImpl implements StoreCommandService {
 
     private final RegionRepository regionRepository;
@@ -32,4 +33,6 @@ public class StoreCommandServiceImpl implements StoreCommandService {
 
         return storeRepository.save(store);
     }
+
+
 }
