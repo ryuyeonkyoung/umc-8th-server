@@ -39,3 +39,16 @@ out/
 ### Gradle ###
 /src/main/resources/application-*.yml
 !/src/main/resources/application.yml
+/src/main/generated/org/umc/spring/domain/common/QBaseEntity.java
+/src/main/generated/org/umc/spring/domain/mapping/QMemberAgree.java
+/src/main/generated/org/umc/spring/domain/mapping/QMemberMission.java
+/src/main/generated/org/umc/spring/domain/mapping/QMemberPrefer.java
+/src/main/generated/org/umc/spring/domain/QComment.java
+/src/main/generated/org/umc/spring/domain/QFoodCategory.java
+/src/main/generated/org/umc/spring/domain/QMember.java
+/src/main/generated/org/umc/spring/domain/QMission.java
+/src/main/generated/org/umc/spring/domain/QRegion.java
+/src/main/generated/org/umc/spring/domain/QReview.java
+/src/main/generated/org/umc/spring/domain/QReviewImage.java
+/src/main/generated/org/umc/spring/domain/QStore.java
+/src/main/generated/org/umc/spring/domain/QTerms.java
