@@ -31,7 +31,8 @@ public class SecurityConfig {
                     (requests) -> requests
                             .requestMatchers("/", "/members/join", "/members/login", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                             .requestMatchers("/admin/**").hasRole("ADMIN")
-                            .anyRequest().authenticated()
+//                            .anyRequest().authenticated()
+                            .anyRequest().permitAll()
             )
             .csrf(AbstractHttpConfigurer::disable) // csrf 비활성화
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
